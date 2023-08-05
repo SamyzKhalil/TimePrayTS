@@ -2,7 +2,7 @@ import { PrayerInputs, PraytimesOutput } from "../types/oldTypes";
 import { PrayerCalculationMethods } from "./methods";
 import PrayTimes from "./PrayTimes";
 export function getPraytimes(inputs: PrayerInputs): PraytimesOutput {
-    const p = PrayTimes({
+    const p = new PrayTimes({
         ...PrayerCalculationMethods[inputs.method || "MWL"].params,
         ...inputs.params
     });
