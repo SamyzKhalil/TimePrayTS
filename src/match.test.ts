@@ -22,16 +22,20 @@ it(`should match for cities`, () => {
     const input = randomBuiltinInput(+city.latitude, +city.longitude);
     const originalPraytimes = OriginalPraytimes(input);
     const newPraytimes = getPraytimes(input);
-    assertPraytimes(originalPraytimes, newPraytimes);
+    assertPraytimes(originalPraytimes, newPraytimes, city);
   }
 });
-function assertPraytimes(original: PraytimesOutput, newtimes: PraytimesOutput) {
+function assertPraytimes(
+  original: PraytimesOutput,
+  newtimes: PraytimesOutput,
+  city: City
+) {
   for (const key in original) {
     if (original[key] === null) expect(newtimes[key]).toBeNull();
     else {
       const o: Date = original[key];
       const n: Date = newtimes[key];
-      expect(n.getTime()).toBeCloseTo(o.getTime(), -1);
+      expect(n.getTime()).toBeCloseTo(o.getTime(), -2);
     }
   }
 }

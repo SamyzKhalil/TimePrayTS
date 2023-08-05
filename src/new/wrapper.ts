@@ -1,9 +1,11 @@
 import { PrayerInputs, PraytimesOutput } from "../types/oldTypes";
+import { PrayerCalculationMethods } from "./methods";
 import PrayTimes from "./PrayTimes";
 export function getPraytimes(inputs: PrayerInputs): PraytimesOutput {
-    const p = new PrayTimes();
-    if (inputs.method) p.setMethod(inputs.method);
-    if (inputs.params) p.adjust(inputs.params);
+    const p = PrayTimes({
+        ...PrayerCalculationMethods[inputs.method || "MWL"].params,
+        ...inputs.params
+    });
 
     const dateParts: [number, number, number] =
         inputs.date instanceof Date
@@ -13,12 +15,12 @@ export function getPraytimes(inputs: PrayerInputs): PraytimesOutput {
                 inputs.date.getDate(),
             ]
             : inputs.date;
-    const res = p.getTimes(inputs.date, inputs.location, 0, 0, "Float");
+    const res = p.getTimes(inputs.date, inputs.location);
 
     return Object.fromEntries(
         Object.entries(res).map(([k, v]) => [
             k,
-            v != "-----" ? convertToDate(dateParts, v as number) : null,
+            v != null ? convertToDate(dateParts, v as number) : null,
         ])
     ) as any;
 }

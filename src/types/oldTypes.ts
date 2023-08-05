@@ -10,14 +10,14 @@ export type Method =
 export type PrayerInputs = {
     // [latitude, longitude, elevation]
     location: [number, number, number?];
-    date: Date|[number,number,number];
+    date: Date | [number, number, number];
     // difference with GMT
     method?: Method;
     params?: Params;
 };
-export type midnightMethod = "Standard" | "Jafari";
+export type MidnightMethod = "Standard" | "Jafari";
 
-export type highLatsMethod =
+export type HighLatsMethod =
     | "None"
     | "NightMiddle"
     | "OneSeventh"
@@ -27,7 +27,7 @@ export type Params = {
     // examples 10 ( which means degrees) or "5 min" which means the minutes value
     imsak?: string | number;
     // example "5 min"
-    fajr?: string;
+    fajr?: string | number;
     // example "5 min"
     dhuhr?: string;
     asr?: number;
@@ -35,11 +35,11 @@ export type Params = {
     maghrib?: string | number;
     // examples 10 ( which means degrees) or "5 min" which means the minutes value
     isha?: string | number;
-    midnight?: midnightMethod;
-    highLats?: highLatsMethod;
+    midnight?: MidnightMethod;
+    highLats?: HighLatsMethod;
 };
 
-type Timenames =
+export type Timenames =
     | "imsak"
     | "fajr"
     | "sunrise"
@@ -51,4 +51,3 @@ type Timenames =
     | "midnight";
 
 export type PraytimesOutput = Record<Timenames, Date | null>;
-
