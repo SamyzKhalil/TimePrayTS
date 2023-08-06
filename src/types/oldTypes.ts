@@ -10,7 +10,7 @@ export type Method =
 export type PrayerInputs = {
     // [latitude, longitude, elevation]
     location: [number, number, number?];
-    date: Date | [number, number, number];
+    date: Date;
     // difference with GMT
     method?: Method;
     params?: Params;
@@ -25,19 +25,20 @@ export type HighLatsMethod =
 
 export type Params = {
     // examples 10 ( which means degrees) or "5 min" which means the minutes value
-    imsak?: string | number;
+    imsak?: DegreeOrMinute;
     // example "5 min"
-    fajr?: string | number;
+    fajr?: DegreeOrMinute;
     // example "5 min"
-    dhuhr?: string;
+    dhuhr?: number;
     asr?: number;
     // examples 10 ( which means degrees) or "5 min" which means the minutes value
-    maghrib?: string | number;
+    maghrib?: DegreeOrMinute;
     // examples 10 ( which means degrees) or "5 min" which means the minutes value
-    isha?: string | number;
+    isha?: DegreeOrMinute;
     midnight?: MidnightMethod;
     highLats?: HighLatsMethod;
 };
+export type DegreeOrMinute = { value: number; isMinutes?: true };
 
 export type Timenames =
     | "imsak"

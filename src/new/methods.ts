@@ -1,51 +1,50 @@
 import { Params } from "../types/oldTypes";
 
 const asrMethod = { Standard: 1, Hanafi: 2 };
-const // do not change anything here; use adjust method instead
-  setting: Params = {
-    imsak: "10 min",
-    dhuhr: "0 min",
-    asr: asrMethod.Standard,
-    highLats: "NightMiddle",
-  };
+const setting: Params = {
+  imsak: { value: 10, isMinutes: true },
+  dhuhr: 0,
+  asr: asrMethod.Standard,
+  highLats: "NightMiddle",
+};
 
 export const defaultParams: Params = {
-  maghrib: "0 min",
+  maghrib: { value: 0, isMinutes: true },
   midnight: "Standard",
   ...setting
 };
 export const PrayerCalculationMethods = {
   MWL: {
     name: "Muslim World League",
-    params: { ...defaultParams, fajr: 18, isha: 17 },
+    params: { ...defaultParams, fajr: { value: 18 }, isha: { value: 17 } },
   },
   ISNA: {
     name: "Islamic Society of North America (ISNA)",
-    params: { ...defaultParams, fajr: 15, isha: 15 },
+    params: { ...defaultParams, fajr: { value: 15 }, isha: { value: 15 } },
   },
   Egypt: {
     name: "Egyptian General Authority of Survey",
     params: {
       ...defaultParams,
-      fajr: 19.5,
-      isha: 17.5,
+      fajr: { value: 19.5 },
+      isha: { value: 17.5 },
     },
   },
   Makkah: {
     name: "Umm Al-Qura University, Makkah",
-    params: { ...defaultParams, fajr: 18.5, isha: "90 min" },
+    params: { ...defaultParams, fajr: { value: 18.5 }, isha: { value: 90, isMinutes: true } },
   }, // fajr was 19 degrees before 1430 hijri
   Karachi: {
     name: "University of Islamic Sciences, Karachi",
-    params: { ...defaultParams, fajr: 18, isha: 18 },
+    params: { ...defaultParams, fajr: { value: 18 }, isha: { value: 18 } },
   },
   Tehran: {
     name: "Institute of Geophysics, University of Tehran",
     params: {
       ...defaultParams,
-      fajr: 17.7,
-      isha: 14,
-      maghrib: 4.5,
+      fajr: { value: 17.7 },
+      isha: { value: 14 },
+      maghrib: { value: 4.5 },
       midnight: "Jafari",
     },
   }, // isha is not explicitly specified in this method
@@ -53,9 +52,9 @@ export const PrayerCalculationMethods = {
     name: "Shia Ithna-Ashari, Leva Institute, Qum",
     params: {
       ...defaultParams,
-      fajr: 16,
-      isha: 14,
-      maghrib: 4,
+      fajr: { value: 16 },
+      isha: { value: 14 },
+      maghrib: { value: 4 },
       midnight: "Jafari",
     },
   },
