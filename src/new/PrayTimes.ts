@@ -7,10 +7,10 @@ Developer: Hamid Zarrabi-Zadeh
 License: GNU LGPL v3.0
 
 TERMS OF USE:
-	Permission is granted to use this code, with or 
-	without modification, in any website or application 
-	provided that credit is given to the original work 
-	with a link back to PrayTimes.org.
+    Permission is granted to use this code, with or 
+    without modification, in any website or application 
+    provided that credit is given to the original work 
+    with a link back to PrayTimes.org.
 
 This program is distributed in the hope that it will 
 be useful, but WITHOUT ANY WARRANTY. 
@@ -33,23 +33,23 @@ http://praytimes.org/calculation
 //------------------------ User Interface -------------------------
 
 
-	getTimes (date, coordinates [, timeZone [, dst [, timeFormat]]]) 
+    getTimes (date, coordinates [, timeZone [, dst [, timeFormat]]]) 
 	
-	setMethod (method)       // set calculation method 
-	adjust (parameters)      // adjust calculation parameters	
-	tune (offsets)           // tune times by given offsets 
+    setMethod (method)       // set calculation method 
+    adjust (parameters)      // adjust calculation parameters	
+    tune (offsets)           // tune times by given offsets 
 
-	getMethod ()             // get calculation method 
-	getSetting ()            // get current calculation parameters
-	getOffsets ()            // get current time offsets
+    getMethod ()             // get calculation method 
+    getSetting ()            // get current calculation parameters
+    getOffsets ()            // get current time offsets
 
 
 //------------------------- Sample Usage --------------------------
 
 
-	var PT = new PrayTimes('ISNA');
-	var times = PT.getTimes(new Date(), [43, -80], -5);
-	document.write('Sunrise = '+ times.sunrise)
+    var PT = new PrayTimes('ISNA');
+    var times = PT.getTimes(new Date(), [43, -80], -5);
+    document.write('Sunrise = '+ times.sunrise)
 
 
 */
@@ -109,7 +109,6 @@ class PrayTimes {
         // main iterations
         for (let i = 1; i <= this.numIterations; i++) {
             const portionized = this.dayPortion(times);
-
             times = {
                 imsak: this.sunAngleTime(
                     this.setting.imsak?.value || 0,
@@ -143,7 +142,7 @@ class PrayTimes {
             };
         }
 
-        for (const i in times) times[i] -= this.longitude / 15;
+        // for (const i in times) times[i] -= this.longitude / 15;
 
         if (this.setting.highLats != "None") {
             // adjustHighLats
@@ -214,7 +213,7 @@ class PrayTimes {
     // compute mid-day time
     private midDay(time: number) {
         const eqt = this.sunPosition(this.julianDate + time).equation;
-        const noon = DMath.fixHour(12 - eqt);
+        const noon = DMath.fixHour(12 - eqt) - this.longitude / 15;
         return noon;
     }
 
