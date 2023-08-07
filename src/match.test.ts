@@ -11,8 +11,7 @@ type City = {
   state_name: string;
   country_id: string;
   country_code: string;
-  country_name: string;
-  latitude: string;
+  country_name: string; latitude: string;
   longitude: string;
   wikiDataId: string;
 };
@@ -42,10 +41,11 @@ function assertPraytimes(
       try {
         expect(n.getTime()).toBeCloseTo(o.getTime(), -2);
       } catch (e) {
+        
+        console.log(inputs, original, newtimes, city, e);
         console.log(
           `invalid ${key} \nold:${o.toISOString()}\nnew:${n.toISOString()}`
         );
-        console.log(inputs, original, newtimes, city, e);
         throw e;
       }
     }

@@ -49,7 +49,7 @@ http://praytimes.org/calculation
 
     var PT = new PrayTimes('ISNA');
     var times = PT.getTimes(new Date(), [43, -80], -5);
-    document.write('Sunrise = '+ times.sunrise)
+    document.write('Sunrise = '+ this.sunrise())
 
 
 */
@@ -63,7 +63,7 @@ type Times = Record<Timenames, number>;
 class PrayTimes {
     //------------------------ Constants --------------------------
 
-    constructor(private setting: Params) {}
+    constructor(private setting: Params) { }
     numIterations = 1;
 
     latitude: number;
@@ -95,7 +95,7 @@ class PrayTimes {
             ) -
             this.longitude / (15 * 24);
         // default times
-        let times: Omit<Times, "midnight"> = {
+        let times: any = {
             imsak: 5,
             fajr: 5,
             sunrise: 6,
@@ -120,17 +120,7 @@ class PrayTimes {
                     portionized.fajr,
                     -1
                 ),
-                sunrise: this.sunAngleTime(
-                    this.riseSetAngle(),
-                    portionized.sunrise,
-                    -1
-                ),
-                dhuhr: this.midDay(portionized.dhuhr),
-                asr: this.asrTime(this.setting.asr || 1, portionized.asr),
-                sunset: this.sunAngleTime(
-                    this.riseSetAngle(),
-                    portionized.sunset
-                ),
+
                 maghrib: this.sunAngleTime(
                     this.setting.maghrib?.value || 0,
                     portionized.maghrib
@@ -146,31 +136,31 @@ class PrayTimes {
 
         if (this.setting.highLats != "None") {
             // adjustHighLats
-            const nightTime = this.timeDiff(times.sunset, times.sunrise);
+            const nightTime = this.timeDiff(this.sunset(), this.sunrise());
 
             times.imsak = this.adjustHLTime(
                 times.imsak,
-                times.sunrise,
+                this.sunrise(),
                 this.setting.imsak?.value || 0,
                 nightTime,
                 -1
             );
             times.fajr = this.adjustHLTime(
                 times.fajr,
-                times.sunrise,
+                this.sunrise(),
                 this.setting.fajr?.value || 0,
                 nightTime,
                 -1
             );
             times.isha = this.adjustHLTime(
                 times.isha,
-                times.sunset,
+                this.sunset(),
                 this.setting.isha?.value || 0,
                 nightTime
             );
             times.maghrib = this.adjustHLTime(
                 times.maghrib,
-                times.sunset,
+                this.sunset(),
                 this.setting.maghrib?.value || 0,
                 nightTime
             );
@@ -180,27 +170,37 @@ class PrayTimes {
             times.imsak = times.fajr - (this.setting.imsak.value || 0) / 60;
         if (this.setting.maghrib?.isMinutes)
             times.maghrib =
-                times.sunset + (this.setting.maghrib.value || 0) / 60;
+                this.sunset() + (this.setting.maghrib.value || 0) / 60;
         if (this.setting.isha?.isMinutes)
             times.isha = times.maghrib + (this.setting.isha.value || 0) / 60;
-        times.dhuhr += (this.setting.dhuhr || 0) / 60;
 
         // add midnight time
         const fullTimes = {
             ...times,
+            dhuhr: this.midDay(12 / 24),
+            sunset: this.sunset(),
+            sunrise: this.sunrise(),
+            asr: this.asrTime(this.setting.asr || 1, 13 / 24),
             midnight:
                 this.setting.midnight == "Jafari"
-                    ? times.sunset + this.timeDiff(times.sunset, times.fajr) / 2
-                    : times.sunset +
-                      this.timeDiff(times.sunset, times.sunrise) / 2,
+                    ? this.sunset() +
+                    this.timeDiff(this.sunset(), times.fajr) / 2
+                    : this.sunset() +
+                    this.timeDiff(this.sunset(), this.sunrise()) / 2,
         };
 
         return Object.fromEntries(
-            Object.entries(fullTimes).map(([k, v]) => [
+            Object.entries(fullTimes).map(([k, v]: any) => [
                 k,
                 this.getFormattedTime(v),
             ])
         );
+    }
+    private sunset() {
+        return this.sunAngleTime(this.riseSetAngle(), 18 / 24);
+    }
+    private sunrise() {
+        return this.sunAngleTime(this.riseSetAngle(), 6 / 24, -1);
     }
 
     // convert float time to the given format (see timeFormats)
@@ -226,7 +226,7 @@ class PrayTimes {
             DMath.arccos(
                 (-DMath.sin(angle) -
                     DMath.sin(decl) * DMath.sin(this.latitude)) /
-                    (DMath.cos(decl) * DMath.cos(this.latitude))
+                (DMath.cos(decl) * DMath.cos(this.latitude))
             );
         return noon + direction * t;
     }
@@ -290,11 +290,6 @@ class PrayTimes {
     }
 
     // convert times to given time format
-
-    // adjust times for locations in higher this.latitudes
-    private adjustHighlats(times: Omit<Times, "midnight">) {
-        return times;
-    }
 
     // adjust a time for higher latitudes
     private adjustHLTime(
