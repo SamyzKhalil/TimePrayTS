@@ -2,25 +2,29 @@ import { PrayerInputs, PraytimesOutput } from "../types/oldTypes";
 import { PrayerCalculationMethods } from "./methods";
 import PrayTimes from "./PrayTimes";
 export function getPraytimes(inputs: PrayerInputs): PraytimesOutput {
-    const p = new PrayTimes({
-        ...PrayerCalculationMethods[inputs.method || "MWL"].params,
-        ...inputs.params
-    });
+    const p = new PrayTimes(
+        {
+            ...PrayerCalculationMethods[inputs.method || "MWL"].params,
+            ...inputs.params,
+        },
+        inputs.date,
+        inputs.location
+    );
 
     const dateParts: [number, number, number] =
         inputs.date instanceof Date
             ? [
-                inputs.date.getFullYear(),
-                inputs.date.getMonth(),
-                inputs.date.getDate(),
-            ]
+                  inputs.date.getFullYear(),
+                  inputs.date.getMonth(),
+                  inputs.date.getDate(),
+              ]
             : inputs.date;
-    const res = p.getTimes(inputs.date, inputs.location);
+    const res = p.getTimes();
 
     return Object.fromEntries(
-        Object.entries(res).map(([k, v]) => [
+        Object.entries(res).map(([k, v]: any) => [
             k,
-            v != null ? convertToDate(dateParts, v as number) : null,
+            !isNaN(v) ? convertToDate(dateParts, v as number) : NaN,
         ])
     ) as any;
 }

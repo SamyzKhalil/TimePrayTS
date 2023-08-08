@@ -34,7 +34,7 @@ function assertPraytimes(
   city?: City
 ) {
   for (const key in original) {
-    if (original[key] === null) expect(newtimes[key]).toBeNull();
+    if (isNaN(original[key])) expect(newtimes[key]).toBeNaN();
     else {
       const o: Date = original[key];
       const n: Date = newtimes[key];

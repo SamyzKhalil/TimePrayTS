@@ -18,7 +18,7 @@ export function OriginalPraytimes(inputs: PrayerInputs): PraytimesOutput {
     return Object.fromEntries(
         Object.entries(res).map(([k, v]) => [
             k,
-            v != "-----" ? convertToDate(dateParts, v as number) : null,
+            v != "-----" ? convertToDate(dateParts, v as number) : NaN,
         ])
     ) as any;
 }
