@@ -7,7 +7,6 @@ export type Method =
     | "Tehran"
     | "Jafari";
 
-
 export type MidnightMethod = "Standard" | "Jafari";
 
 export type HighLatsMethod =
@@ -17,29 +16,22 @@ export type HighLatsMethod =
     | "AngleBased";
 
 export type Params = {
-    // examples 10 ( which means degrees) or "5 min" which means the minutes value
-    imsak?: DegreeOrMinute;
-    // example "5 min"
+    imsak?: Degrees | Minutes;
     fajr?: Degrees;
-    // example "5 min"
     dhuhr?: Minutes;
     asr?: { factor: number };
-    // examples 10 ( which means degrees) or "5 min" which means the minutes value
-    maghrib?: DegreeOrMinute;
-    // examples 10 ( which means degrees) or "5 min" which means the minutes value
-    isha?: DegreeOrMinute;
+    maghrib?: Degrees | Minutes;
+    isha?: Degrees | Minutes;
     midnight?: MidnightMethod;
     highLats?: HighLatsMethod;
 };
-type Degrees = {
+export type Degrees = {
     degree: number;
 };
 
-type Minutes = {
+export type Minutes = {
     minutes: number;
 };
-
-export type DegreeOrMinute = Degrees | Minutes;
 
 export type Timenames =
     | "imsak"
@@ -59,5 +51,3 @@ export type Location = {
     latitude: number;
     elevation?: number;
 };
-
-

@@ -22,11 +22,19 @@ import { Location, Params } from "./types";
 import { sunPosition } from "./utils/sunPosition";
 import { toJulianDate } from "./utils/toJulianDate";
 import * as DMath from "./utils/degree-math";
+import { asrFactors } from "./method-data";
 
 //------------------------ Constants --------------------------
 const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     const julianDate = toJulianDate(date, location);
 
+    setting = {
+        imsak: { minutes: 10 },
+        dhuhr: { minutes: 0 },
+        asr: asrFactors.Standard,
+        highLats: "NightMiddle",
+        ...setting,
+    };
     return {
         dhuhr: toDate(dhuhr()),
         sunset: toDate(sunset()),

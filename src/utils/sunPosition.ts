@@ -16,4 +16,3 @@ export function sunPosition(jd: number) {
 
     return { declination: decl, equation: eqt };
 }
-
