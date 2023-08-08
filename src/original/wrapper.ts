@@ -8,17 +8,19 @@ export function OriginalPraytimes(inputs: PrayerInputs): PraytimesOutput {
     const dateParts: [number, number, number] =
         inputs.date instanceof Date
             ? [
-                inputs.date.getFullYear(),
-                inputs.date.getMonth(),
-                inputs.date.getDate(),
-            ]
+                  inputs.date.getFullYear(),
+                  inputs.date.getMonth(),
+                  inputs.date.getDate(),
+              ]
             : inputs.date;
     const res = p.getTimes(inputs.date, inputs.location, 0, 0, "Float");
 
     return Object.fromEntries(
         Object.entries(res).map(([k, v]) => [
             k,
-            v != "-----" ? convertToDate(dateParts, v as number) : NaN,
+            v != "-----"
+                ? convertToDate(dateParts, v as number)
+                : new Date(NaN),
         ])
     ) as any;
 }

@@ -27,10 +27,10 @@ export type Params = {
     // examples 10 ( which means degrees) or "5 min" which means the minutes value
     imsak?: DegreeOrMinute;
     // example "5 min"
-    fajr?: DegreeOrMinute;
+    fajr?: Degrees;
     // example "5 min"
-    dhuhr?: number;
-    asr?: number;
+    dhuhr?: Minutes;
+    asr?: { factor: number };
     // examples 10 ( which means degrees) or "5 min" which means the minutes value
     maghrib?: DegreeOrMinute;
     // examples 10 ( which means degrees) or "5 min" which means the minutes value
@@ -38,7 +38,15 @@ export type Params = {
     midnight?: MidnightMethod;
     highLats?: HighLatsMethod;
 };
-export type DegreeOrMinute = { value: number; isMinutes?: true };
+type Degrees = {
+    degree: number;
+};
+
+type Minutes = {
+    minutes: number;
+};
+
+export type DegreeOrMinute = Degrees | Minutes;
 
 export type Timenames =
     | "imsak"
@@ -51,4 +59,4 @@ export type Timenames =
     | "isha"
     | "midnight";
 
-export type PraytimesOutput = Record<Timenames, Date | null>;
+export type PraytimesOutput = Record<Timenames, Date>;

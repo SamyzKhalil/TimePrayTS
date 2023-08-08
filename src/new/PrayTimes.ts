@@ -18,93 +18,53 @@ be useful, but WITHOUT ANY WARRANTY.
 PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
-
-//--------------------- Help and Manual ----------------------
-/*
-
-User's Manual:
-http://praytimes.org/manual
-
-Calculation Formulas:
-http://praytimes.org/calculation
-
-
-
-//------------------------ User Interface -------------------------
-
-
-    getTimes (date, coordinates [, timeZone [, dst [, timeFormat]]])
-
-    setMethod (method)       // set calculation method
-    adjust (parameters)      // adjust calculation parameters
-    tune (offsets)           // tune times by given offsets
-
-    getMethod ()             // get calculation method
-    getSetting ()            // get current calculation parameters
-    getOffsets ()            // get current time offsets
-
-
-//------------------------- Sample Usage --------------------------
-
-
-    var PT = new PrayTimes('ISNA');
-    var times = PT.getTimes(new Date(), [43, -80], -5);
-    document.write('Sunrise = '+ this.sunrise())
-
-
-*/
-
-//----------------------- PrayTimes Class ------------------------
 import { Params } from "../types/oldTypes";
 import * as DMath from "./utils/degree-math";
+
+type Location = {
+    longitude: number;
+    latitude: number;
+    elevation?: number;
+};
 
 class PrayTimes {
     //------------------------ Constants --------------------------
 
     constructor(
         private setting: Params,
-        date: Date,
-        [latitude, longitude, elevation = 0]: [number, number, number?]
+        private location: Location,
+        private date: Date
     ) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.elevation = elevation;
         this.julianDate =
             this.julian(
                 date.getFullYear(),
                 date.getMonth() + 1,
                 date.getDate()
             ) -
-            this.longitude / (15 * 24);
+            this.location.longitude / (15 * 24);
     }
-    numIterations = 1;
 
-    latitude: number;
-    longitude: number;
-
-    elevation: number;
-
-    julianDate: number;
+    private julianDate: number;
 
     public getTimes() {
         return {
-            dhuhr: this.dhuhr(),
-            sunset: this.sunset(),
-            sunrise: this.sunrise(),
-            asr: this.asr(),
-            fajr: this.fajr(),
-            imsak: this.imsak(),
-            maghrib: this.maghrib(),
-            isha: this.isha(),
-            midnight: this.midnight(),
+            dhuhr: this.toDate(this.dhuhr()),
+            sunset: this.toDate(this.sunset()),
+            sunrise: this.toDate(this.sunrise()),
+            asr: this.toDate(this.asr()),
+            fajr: this.toDate(this.fajr()),
+            imsak: this.toDate(this.imsak()),
+            maghrib: this.toDate(this.maghrib()),
+            isha: this.toDate(this.isha()),
+            midnight: this.toDate(this.midnight()),
         };
     }
     private asr() {
-        return this.asrTime(this.setting.asr || 1, 13 / 24);
+        return this.asrTime(this.setting.asr?.factor || 1, 13 / 24);
     }
 
     private dhuhr() {
-        return this.midDay(12 / 24);
+        return this.midDay(12 / 24) + (this.setting.dhuhr?.minutes || 0) / 60;
     }
     private midnight() {
         return this.setting.midnight == "Jafari"
@@ -113,50 +73,50 @@ class PrayTimes {
     }
 
     private isha() {
-        if (this.setting.isha?.isMinutes) {
-            return this.maghrib() + (this.setting.isha.value || 0) / 60;
+        if (this.setting.isha && "minutes" in this.setting.isha) {
+            return this.maghrib() + (this.setting.isha.minutes || 0) / 60;
         }
 
-        const time = this.sunAngleTime(this.setting.isha?.value || 0, 18 / 24);
+        const time = this.sunAngleTime(this.setting.isha?.degree || 0, 18 / 24);
         const adjusted = this.adjustHLTime(
             time,
             this.sunset(),
-            this.setting.isha?.value || 0,
+            this.setting.isha?.degree || 0,
             this.nightTime()
         );
         return adjusted;
     }
     private maghrib() {
-        if (this.setting.maghrib?.isMinutes) {
-            return this.sunset() + (this.setting.maghrib.value || 0) / 60;
+        if (this.setting.maghrib && "minutes" in this.setting.maghrib) {
+            return this.sunset() + (this.setting.maghrib.minutes || 0) / 60;
         }
 
         const time = this.sunAngleTime(
-            this.setting.maghrib?.value || 0,
+            this.setting.maghrib?.degree || 0,
             18 / 24
         );
         const adjusted = this.adjustHLTime(
             time,
             this.sunset(),
-            this.setting.maghrib?.value || 0,
+            this.setting.maghrib?.degree || 0,
             this.nightTime()
         );
 
         return adjusted;
     }
     private imsak() {
-        if (this.setting.imsak?.isMinutes) {
-            return this.fajr() - (this.setting.imsak.value || 0) / 60;
+        if (this.setting.imsak && "minutes" in this.setting.imsak) {
+            return this.fajr() - (this.setting.imsak.minutes || 0) / 60;
         }
         const time = this.sunAngleTime(
-            this.setting.imsak?.value || 0,
+            this.setting.imsak?.degree || 0,
             5 / 24,
             -1
         );
         const adjusted = this.adjustHLTime(
             time,
             this.sunrise(),
-            this.setting.imsak?.value || 0,
+            this.setting.imsak?.degree || 0,
             this.nightTime(),
             -1
         );
@@ -165,14 +125,14 @@ class PrayTimes {
     }
     private fajr() {
         const time = this.sunAngleTime(
-            this.setting.fajr?.value || 0,
+            this.setting.fajr?.degree || 0,
             5 / 24,
             -1
         );
         const adjusted = this.adjustHLTime(
             time,
             this.sunrise(),
-            this.setting.fajr?.value || 0,
+            this.setting.fajr?.degree || 0,
             this.nightTime(),
             -1
         );
@@ -194,7 +154,7 @@ class PrayTimes {
     // compute mid-day time
     private midDay(time: number) {
         const eqt = this.sunPosition(this.julianDate + time).equation;
-        const noon = DMath.fixHour(12 - eqt) - this.longitude / 15;
+        const noon = DMath.fixHour(12 - eqt) - this.location.longitude / 15;
         return noon;
     }
 
@@ -206,8 +166,8 @@ class PrayTimes {
             (1 / 15) *
             DMath.arccos(
                 (-DMath.sin(angle) -
-                    DMath.sin(decl) * DMath.sin(this.latitude)) /
-                    (DMath.cos(decl) * DMath.cos(this.latitude))
+                    DMath.sin(decl) * DMath.sin(this.location.latitude)) /
+                    (DMath.cos(decl) * DMath.cos(this.location.latitude))
             );
         return noon + direction * t;
     }
@@ -216,7 +176,7 @@ class PrayTimes {
     private asrTime(factor: number, time: number) {
         const decl = this.sunPosition(this.julianDate + time).declination;
         const angle = -DMath.arccot(
-            factor + DMath.tan(Math.abs(this.latitude - decl))
+            factor + DMath.tan(Math.abs(this.location.latitude - decl))
         );
         return this.sunAngleTime(angle, time);
     }
@@ -266,11 +226,9 @@ class PrayTimes {
     private riseSetAngle() {
         //var earthRad = 6371009; // in meters
         //var angle = DMath.arccos(earthRad/(earthRad+ this.elv));
-        const angle = 0.0347 * Math.sqrt(this.elevation); // an approximation
+        const angle = 0.0347 * Math.sqrt(this.location.elevation || 0); // an approximation
         return 0.833 + angle;
     }
-
-    // convert times to given time format
 
     // adjust a time for higher latitudes
     private adjustHLTime(
@@ -282,8 +240,6 @@ class PrayTimes {
     ) {
         if (this.setting.highLats == "None") {
             return time;
-
-            // adjustHighLats
         }
         const portion = this.nightPortion(angle, night);
         const timeDiff =
@@ -305,17 +261,26 @@ class PrayTimes {
         return portion * night;
     }
 
-    //---------------------- Misc Functions -----------------------
-
     // compute the difference between two times
     private timeDiff(time1: number, time2: number) {
         return DMath.fixHour(time2 - time1);
     }
+    toDate(hours: number) {
+        if (isNaN(hours)) {
+            return new Date(NaN);
+        }
+        return new Date(
+            Date.UTC(
+                this.date.getFullYear(),
+                this.date.getMonth(),
+                this.date.getDate(),
+                Math.floor(hours),
+                Math.floor((hours * 60) % 60),
+                Math.floor((hours * 3600) % 60),
+                Math.floor((hours * 3600 * 1000) % 1000)
+            )
+        );
+    }
 }
-
-//---------------------- Degree-Based Math Class -----------------------
-
-//---------------------- Init Object -----------------------
-//
 
 export default PrayTimes;
