@@ -1,4 +1,4 @@
-import { Method, Params } from "../new/types";
+import { Method, Params } from "../src/types";
 
 
 export type PrayerInputs = {

@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import { getPraytimes } from "./wrapper";
 import { OriginalPraytimes } from "./original/wrapper";
 import { randomBuiltinInput } from "./utils/random-inputs";
-import { PraytimesOutput } from "../new/types";
+import { PraytimesOutput } from "../src/types";
 type City = {
     id: string;
     name: string;

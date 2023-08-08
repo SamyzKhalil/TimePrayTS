@@ -3,7 +3,7 @@ import {
   Method,
   MidnightMethod,
   Params,
-} from "../../new/types";
+} from "../../src/types";
 import { PrayerInputs } from "../PrayerInputs";
 
 const randomMethod = () => {

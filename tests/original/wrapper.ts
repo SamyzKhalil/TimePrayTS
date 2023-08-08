@@ -1,4 +1,4 @@
-import { PraytimesOutput } from "../../new/types";
+import { PraytimesOutput } from "../../src/types";
 import { PrayerInputs } from "../PrayerInputs";
 import PrayTimes from "./PrayTimes";
 export function OriginalPraytimes(inputs: PrayerInputs): PraytimesOutput {
