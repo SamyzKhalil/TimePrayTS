@@ -1,6 +1,7 @@
-import { Params } from "../types/oldTypes";
+import { Params } from "./types";
 
 const asrMethod = { Standard: { factor: 1 }, Hanafi: { factor: 2 } };
+
 const setting: Params = {
   imsak: { minutes: 10 },
   dhuhr: { minutes: 0 },

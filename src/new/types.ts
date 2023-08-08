@@ -7,14 +7,7 @@ export type Method =
     | "Tehran"
     | "Jafari";
 
-export type PrayerInputs = {
-    // [latitude, longitude, elevation]
-    location: [number, number, number?];
-    date: Date;
-    // difference with GMT
-    method?: Method;
-    params?: Params;
-};
+
 export type MidnightMethod = "Standard" | "Jafari";
 
 export type HighLatsMethod =
@@ -60,3 +53,11 @@ export type Timenames =
     | "midnight";
 
 export type PraytimesOutput = Record<Timenames, Date>;
+
+export type Location = {
+    longitude: number;
+    latitude: number;
+    elevation?: number;
+};
+
+
