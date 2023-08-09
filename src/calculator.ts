@@ -18,12 +18,12 @@ be useful, but WITHOUT ANY WARRANTY.
 PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
-import {Degrees, Location, Minutes, Params} from "./types";
-import {sunPosition} from "./utils/sunPosition";
-import {toJulianDate} from "./utils/toJulianDate";
+import { Degrees, Location, Minutes, Params } from "./types";
+import { sunPosition } from "./utils/sunPosition";
+import { toJulianDate } from "./utils/toJulianDate";
 import * as DMath from "./utils/degree-math";
-import {asrFactors} from "./method-data";
-import {fixHour} from "./utils/numbers";
+import { asrFactors } from "./method-data";
+import { fixHour } from "./utils/numbers";
 
 const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     const julianDate = toJulianDate(date, location);
@@ -158,7 +158,6 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
         );
         return midDay(time) + SAT(time, angle);
     }
-
 
     //---------------------- Compute Prayer Times -----------------------
 

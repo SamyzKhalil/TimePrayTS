@@ -31,4 +31,3 @@ export function arccot(x: number) {
 export function arctan2(y: number, x: number) {
     return rtd(Math.atan2(y, x));
 }
-

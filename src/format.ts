@@ -1,5 +1,5 @@
-import {Format, PraytimesOutput} from "./types";
-import {fixHour} from "./utils/numbers";
+import { Format, PraytimesOutput } from "./types";
+import { fixHour } from "./utils/numbers";
 
 export function format(
     times: Partial<PraytimesOutput>,
