@@ -18,18 +18,18 @@ be useful, but WITHOUT ANY WARRANTY.
 PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
-import {Degrees, Location, Minutes, Params} from "./types";
-import {sunPosition} from "./utils/sunPosition";
-import {toJulianDate} from "./utils/toJulianDate";
+import { Degrees, Location, Minutes, Params } from "./types";
+import { sunPosition } from "./utils/sunPosition";
+import { toJulianDate } from "./utils/toJulianDate";
 import * as DMath from "./utils/degree-math";
-import {asrFactors} from "./method-data";
+import { asrFactors } from "./method-data";
 
 const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     const julianDate = toJulianDate(date, location);
 
     setting = {
-        imsak: {minutes: 10},
-        dhuhr: {minutes: 0},
+        imsak: { minutes: 10 },
+        dhuhr: { minutes: 0 },
         asr: asrFactors.Standard,
         highLats: "NightMiddle",
         ...setting,
@@ -55,9 +55,14 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     }
 
     function midnight() {
-        return setting.midnight == "Jafari"
-            ? sunset() + timeDifference(sunset(), fajr()) / 2
-            : sunset() + timeDifference(sunset(), sunrise()) / 2;
+        return (
+            sunset() +
+            timeDifference(
+                sunset(),
+                setting.midnight == "Jafari" ? fajr() : sunrise()
+            ) /
+                2
+        );
     }
 
     function isMinutes(s: Degrees | Minutes | undefined): s is Minutes {
@@ -72,7 +77,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
         const angle = setting.isha?.degree || 0;
         const time = midDay(18 / 24) + SAT(18 / 24, angle);
         if (hlAdjustmentNeeded(time, sunset(), angle)) {
-            return sunset() + nightPortion(angle)
+            return sunset() + nightPortion(angle);
         }
 
         return time;
@@ -85,7 +90,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
         const angle = setting.maghrib?.degree || 0;
         const time = midDay(18 / 24) + SAT(18 / 24, angle);
         if (hlAdjustmentNeeded(time, sunset(), angle)) {
-            return sunset() + nightPortion(angle)
+            return sunset() + nightPortion(angle);
         }
         return time;
     }
@@ -95,18 +100,18 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
             return fajr() - (setting.imsak.minutes || 0) / 60;
         }
         const angle = setting.imsak?.degree || 0;
-        const time = midDay(5 / 24) -SAT(5 / 24, angle);
+        const time = midDay(5 / 24) - SAT(5 / 24, angle);
         if (hlAdjustmentNeeded(time, sunrise(), angle)) {
-            return sunrise() - nightPortion(angle)
+            return sunrise() - nightPortion(angle);
         }
-        return time
+        return time;
     }
 
     function fajr() {
         const angle = setting.fajr?.degree || 0;
-        const time = midDay(5 / 24) -SAT(5 / 24, angle);
+        const time = midDay(5 / 24) - SAT(5 / 24, angle);
         if (hlAdjustmentNeeded(time, sunrise(), angle))
-            return sunrise() - nightPortion(angle)
+            return sunrise() - nightPortion(angle);
         return time;
     }
 
@@ -133,15 +138,17 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
 
     function SAT(time: number, angle: number) {
         const decl = sunPosition(julianDate + time).declination;
-        return (1 / 15) *
+        return (
+            (1 / 15) *
             DMath.arccos(
                 (-DMath.sin(angle) -
                     DMath.sin(decl) * DMath.sin(location.latitude)) /
-                (DMath.cos(decl) * DMath.cos(location.latitude))
-            );
+                    (DMath.cos(decl) * DMath.cos(location.latitude))
+            )
+        );
     }
 
-// compute the time at which sun reaches a specific angle below horizon
+    // compute the time at which sun reaches a specific angle below horizon
     // compute asr time
     function asrTime(factor: number, time: number) {
         const decl = sunPosition(julianDate + time).declination;
@@ -165,7 +172,6 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     }
 
     // adjust a time for higher latitudes
-
 
     function hlAdjustmentNeeded(time: number, base: number, angle: number) {
         const portion = nightPortion(angle);
