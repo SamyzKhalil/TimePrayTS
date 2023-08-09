@@ -18,19 +18,18 @@ be useful, but WITHOUT ANY WARRANTY.
 PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
-import { Location, Params } from "./types";
-import { sunPosition } from "./utils/sunPosition";
-import { toJulianDate } from "./utils/toJulianDate";
+import {Degrees, Location, Minutes, Params} from "./types";
+import {sunPosition} from "./utils/sunPosition";
+import {toJulianDate} from "./utils/toJulianDate";
 import * as DMath from "./utils/degree-math";
-import { asrFactors } from "./method-data";
+import {asrFactors} from "./method-data";
 
-//------------------------ Constants --------------------------
 const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     const julianDate = toJulianDate(date, location);
 
     setting = {
-        imsak: { minutes: 10 },
-        dhuhr: { minutes: 0 },
+        imsak: {minutes: 10},
+        dhuhr: {minutes: 0},
         asr: asrFactors.Standard,
         highLats: "NightMiddle",
         ...setting,
@@ -54,70 +53,67 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     function dhuhr() {
         return midDay(12 / 24) + (setting.dhuhr?.minutes || 0) / 60;
     }
+
     function midnight() {
         return setting.midnight == "Jafari"
             ? sunset() + timeDifference(sunset(), fajr()) / 2
             : sunset() + timeDifference(sunset(), sunrise()) / 2;
     }
 
+    function isMinutes(s: Degrees | Minutes | undefined):s is Minutes {
+        return !!s && "minutes" in s;
+    }
+
     function isha() {
-        if (setting.isha && "minutes" in setting.isha) {
+        if (isMinutes(setting.isha)) {
             return maghrib() + (setting.isha.minutes || 0) / 60;
         }
 
-        const time = sunAngleTime(setting.isha?.degree || 0, 18 / 24);
-        const adjusted = adjustHLTime(
-            time,
-            sunset(),
-            setting.isha?.degree || 0,
-            nightTime()
-        );
-        return adjusted;
+        const angle = setting.isha?.degree || 0;
+        const time = sunAngleTime(angle, 18 / 24);
+        if (hlAdjustmentNeeded(time, sunset(), angle)) {
+            return sunset() + nightPortion(angle)
+        }
+
+        return time;
     }
+
     function maghrib() {
-        if (setting.maghrib && "minutes" in setting.maghrib) {
+        if (isMinutes(setting.maghrib)) {
             return sunset() + (setting.maghrib.minutes || 0) / 60;
         }
-
-        const time = sunAngleTime(setting.maghrib?.degree || 0, 18 / 24);
-        const adjusted = adjustHLTime(
-            time,
-            sunset(),
-            setting.maghrib?.degree || 0,
-            nightTime()
-        );
-
-        return adjusted;
+        const angle = setting.maghrib?.degree || 0;
+        const time = sunAngleTime(angle, 18 / 24);
+        if (hlAdjustmentNeeded(time, sunset(), angle)) {
+            return sunset() + nightPortion(angle)
+        }
+        return time;
     }
+
     function imsak() {
-        if (setting.imsak && "minutes" in setting.imsak) {
+        if (isMinutes(setting.imsak)) {
             return fajr() - (setting.imsak.minutes || 0) / 60;
         }
-        const time = sunAngleTime(setting.imsak?.degree || 0, 5 / 24, -1);
-        const adjusted = adjustHLTime(
-            time,
-            sunrise(),
-            setting.imsak?.degree || 0,
-            nightTime(),
-            -1
-        );
+        const angle = setting.imsak?.degree || 0;
+        const time = sunAngleTime(angle, 5 / 24, -1);
+        if (hlAdjustmentNeeded(time, sunrise(), angle)) {
+            return sunrise() - nightPortion(angle)
+        }
+        return time
+    }
 
-        return adjusted;
-    }
     function fajr() {
-        const time = sunAngleTime(setting.fajr?.degree || 0, 5 / 24, -1);
-        const adjusted = adjustHLTime(
-            time,
-            sunrise(),
-            setting.fajr?.degree || 0,
-            nightTime(),
-            -1
-        );
-        return adjusted;
+        const angle = setting.fajr?.degree || 0;
+        const time = sunAngleTime(angle, 5 / 24, -1);
+        if (hlAdjustmentNeeded(time, sunrise(), angle))
+            return sunrise() - nightPortion(angle)
+        return time;
     }
+
     function sunset() {
         return sunAngleTime(riseSetAngle(), 18 / 24);
     }
+
     function sunrise() {
         return sunAngleTime(riseSetAngle(), 6 / 24, -1);
     }
@@ -144,7 +140,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
             DMath.arccos(
                 (-DMath.sin(angle) -
                     DMath.sin(decl) * DMath.sin(location.latitude)) /
-                    (DMath.cos(decl) * DMath.cos(location.latitude))
+                (DMath.cos(decl) * DMath.cos(location.latitude))
             );
         return noon + direction * t;
     }
@@ -176,25 +172,27 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
         time: number,
         base: number,
         angle: number,
-        night: number,
         direction: 1 | -1 = 1
     ) {
-        if (setting.highLats == "None") {
-            return time;
+        let t = time
+        if (hlAdjustmentNeeded(time, base, angle)) {
+            t = base + direction * nightPortion(angle);
         }
-        const portion = nightPortion(angle, night);
-        const timeDiff =
-            direction == -1
-                ? timeDifference(time, base)
-                : timeDifference(base, time);
-        if (isNaN(time) || timeDiff > portion) {
-            time = base + direction * portion;
-        }
-        return time;
+
+        return t;
+    }
+
+    function hlAdjustmentNeeded(time: number, base: number, angle: number) {
+        const portion = nightPortion(angle);
+        const timeDiff = Math.abs(time - base);
+        return (
+            setting.highLats != "None" && (isNaN(time) || timeDiff > portion)
+        );
     }
 
     // the night portion used for adjusting times in higher latitudes
-    function nightPortion(angle: number, night: number) {
+    function nightPortion(angle: number) {
+        const night = nightTime();
         const method = setting.highLats;
         let portion = 1 / 2; // MidNight
         if (method == "AngleBased") portion = (1 / 60) * angle;
@@ -206,6 +204,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     function timeDifference(time1: number, time2: number) {
         return DMath.fixHour(time2 - time1);
     }
+
     function toDate(hours: number) {
         if (isNaN(hours)) {
             return new Date(NaN);
