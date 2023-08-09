@@ -70,9 +70,9 @@ it("specific case ", () => {
     assertPraytimes(input, originalPraytimes, newPraytimes);
 });
 
-it("imsak degree", () => {
+it("imsak degree high lats", () => {
     const input: PrayerInputs = {
-        location: [44.9632, 2.48994, 0] as [number, number, number],
+        location: [89, 2.48994, 0] as [number, number, number],
         date: new Date("2066-10-26T12:34:03.675Z"),
         method: "Tehran" as const,
         params: {
@@ -84,7 +84,28 @@ it("imsak degree", () => {
 
     const originalPraytimes = OriginalPraytimes({
         ...input,
-        params: { ...input.params, imsak: 10 },
+        params: { ...input.params, imsak: "10" },
+    });
+    const newPraytimes = getPraytimes(input);
+
+    assertPraytimes(input, originalPraytimes, newPraytimes);
+});
+
+it("imsak degree", () => {
+    const input: PrayerInputs = {
+        location: [30, 2.48994, 0] as [number, number, number],
+        date: new Date("2066-10-26T12:34:03.675Z"),
+        method: "Tehran" as const,
+        params: {
+            midnight: undefined,
+            highLats: "AngleBased",
+            imsak: { degree: 10 },
+        } as const,
+    };
+
+    const originalPraytimes = OriginalPraytimes({
+        ...input,
+        params: { ...input.params, imsak: "10" },
     });
     const newPraytimes = getPraytimes(input);
 
