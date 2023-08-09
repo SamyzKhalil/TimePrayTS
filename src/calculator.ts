@@ -60,7 +60,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
             : sunset() + timeDifference(sunset(), sunrise()) / 2;
     }
 
-    function isMinutes(s: Degrees | Minutes | undefined):s is Minutes {
+    function isMinutes(s: Degrees | Minutes | undefined): s is Minutes {
         return !!s && "minutes" in s;
     }
 
@@ -70,7 +70,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
         }
 
         const angle = setting.isha?.degree || 0;
-        const time = sunAngleTime(angle, 18 / 24);
+        const time = midDay(18 / 24) + SAT(18 / 24, angle);
         if (hlAdjustmentNeeded(time, sunset(), angle)) {
             return sunset() + nightPortion(angle)
         }
@@ -83,7 +83,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
             return sunset() + (setting.maghrib.minutes || 0) / 60;
         }
         const angle = setting.maghrib?.degree || 0;
-        const time = sunAngleTime(angle, 18 / 24);
+        const time = midDay(18 / 24) + SAT(18 / 24, angle);
         if (hlAdjustmentNeeded(time, sunset(), angle)) {
             return sunset() + nightPortion(angle)
         }
@@ -95,7 +95,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
             return fajr() - (setting.imsak.minutes || 0) / 60;
         }
         const angle = setting.imsak?.degree || 0;
-        const time = sunAngleTime(angle, 5 / 24, -1);
+        const time = midDay(5 / 24) -SAT(5 / 24, angle);
         if (hlAdjustmentNeeded(time, sunrise(), angle)) {
             return sunrise() - nightPortion(angle)
         }
@@ -104,18 +104,18 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
 
     function fajr() {
         const angle = setting.fajr?.degree || 0;
-        const time = sunAngleTime(angle, 5 / 24, -1);
+        const time = midDay(5 / 24) -SAT(5 / 24, angle);
         if (hlAdjustmentNeeded(time, sunrise(), angle))
             return sunrise() - nightPortion(angle)
         return time;
     }
 
     function sunset() {
-        return sunAngleTime(riseSetAngle(), 18 / 24);
+        return midDay(18 / 24) + SAT(18 / 24, riseSetAngle());
     }
 
     function sunrise() {
-        return sunAngleTime(riseSetAngle(), 6 / 24, -1);
+        return midDay(6 / 24) + -1 * SAT(6 / 24, riseSetAngle());
     }
 
     function nightTime() {
@@ -131,27 +131,24 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
         return noon;
     }
 
-    // compute the time at which sun reaches a specific angle below horizon
-    function sunAngleTime(angle: number, time: number, direction: 1 | -1 = 1) {
+    function SAT(time: number, angle: number) {
         const decl = sunPosition(julianDate + time).declination;
-        const noon = midDay(time);
-        const t =
-            (1 / 15) *
+        return (1 / 15) *
             DMath.arccos(
                 (-DMath.sin(angle) -
                     DMath.sin(decl) * DMath.sin(location.latitude)) /
                 (DMath.cos(decl) * DMath.cos(location.latitude))
             );
-        return noon + direction * t;
     }
 
+// compute the time at which sun reaches a specific angle below horizon
     // compute asr time
     function asrTime(factor: number, time: number) {
         const decl = sunPosition(julianDate + time).declination;
         const angle = -DMath.arccot(
             factor + DMath.tan(Math.abs(location.latitude - decl))
         );
-        return sunAngleTime(angle, time);
+        return midDay(time) + SAT(time, angle);
     }
 
     // compute declination angle of sun and equation of time
@@ -168,19 +165,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     }
 
     // adjust a time for higher latitudes
-    function adjustHLTime(
-        time: number,
-        base: number,
-        angle: number,
-        direction: 1 | -1 = 1
-    ) {
-        let t = time
-        if (hlAdjustmentNeeded(time, base, angle)) {
-            t = base + direction * nightPortion(angle);
-        }
 
-        return t;
-    }
 
     function hlAdjustmentNeeded(time: number, base: number, angle: number) {
         const portion = nightPortion(angle);
