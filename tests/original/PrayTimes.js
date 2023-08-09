@@ -289,7 +289,7 @@ function PrayTimes(method) {
                 (1 / 15) *
                 DMath.arccos(
                     (-DMath.sin(angle) - DMath.sin(decl) * DMath.sin(lat)) /
-                        (DMath.cos(decl) * DMath.cos(lat))
+                        (DMath.cos(decl) * DMath.cos(lat)),
                 );
             return noon + (direction == "ccw" ? -t : t);
         },
@@ -308,7 +308,7 @@ function PrayTimes(method) {
             var g = DMath.fixAngle(357.529 + 0.98560028 * D);
             var q = DMath.fixAngle(280.459 + 0.98564736 * D);
             var L = DMath.fixAngle(
-                q + 1.915 * DMath.sin(g) + 0.02 * DMath.sin(2 * g)
+                q + 1.915 * DMath.sin(g) + 0.02 * DMath.sin(2 * g),
             );
 
             var R =
@@ -352,24 +352,24 @@ function PrayTimes(method) {
             var imsak = this.sunAngleTime(
                 this.eval(params.imsak),
                 times.imsak,
-                "ccw"
+                "ccw",
             );
             var fajr = this.sunAngleTime(
                 this.eval(params.fajr),
                 times.fajr,
-                "ccw"
+                "ccw",
             );
             var sunrise = this.sunAngleTime(
                 this.riseSetAngle(),
                 times.sunrise,
-                "ccw"
+                "ccw",
             );
             var dhuhr = this.midDay(times.dhuhr);
             var asr = this.asrTime(this.asrFactor(params.asr), times.asr);
             var sunset = this.sunAngleTime(this.riseSetAngle(), times.sunset);
             var maghrib = this.sunAngleTime(
                 this.eval(params.maghrib),
-                times.maghrib
+                times.maghrib,
             );
             var isha = this.sunAngleTime(this.eval(params.isha), times.isha);
 
@@ -471,26 +471,26 @@ function PrayTimes(method) {
                 times.sunrise,
                 this.eval(params.imsak),
                 nightTime,
-                "ccw"
+                "ccw",
             );
             times.fajr = this.adjustHLTime(
                 times.fajr,
                 times.sunrise,
                 this.eval(params.fajr),
                 nightTime,
-                "ccw"
+                "ccw",
             );
             times.isha = this.adjustHLTime(
                 times.isha,
                 times.sunset,
                 this.eval(params.isha),
-                nightTime
+                nightTime,
             );
             times.maghrib = this.adjustHLTime(
                 times.maghrib,
                 times.sunset,
                 this.eval(params.maghrib),
-                nightTime
+                nightTime,
             );
 
             return times;
@@ -547,11 +547,11 @@ function PrayTimes(method) {
                 12,
                 0,
                 0,
-                0
+                0,
             );
             var GMTString = localDate.toGMTString();
             var GMTDate = new Date(
-                GMTString.substring(0, GMTString.lastIndexOf(" ") - 1)
+                GMTString.substring(0, GMTString.lastIndexOf(" ") - 1),
             );
             var hoursDiff = (localDate - GMTDate) / (1000 * 60 * 60);
             return hoursDiff;

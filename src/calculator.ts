@@ -60,7 +60,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
             sunset() +
             timeDifference(
                 sunset(),
-                setting.midnight == "Jafari" ? fajr() : sunrise()
+                setting.midnight == "Jafari" ? fajr() : sunrise(),
             ) /
                 2
         );
@@ -144,7 +144,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
             DMath.arccos(
                 (-DMath.sin(angle) -
                     DMath.sin(decl) * DMath.sin(location.latitude)) /
-                    (DMath.cos(decl) * DMath.cos(location.latitude))
+                    (DMath.cos(decl) * DMath.cos(location.latitude)),
             )
         );
     }
@@ -154,7 +154,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     function asrTime(factor: number, time: number) {
         const decl = sunPosition(julianDate + time).declination;
         const angle = -DMath.arccot(
-            factor + DMath.tan(Math.abs(location.latitude - decl))
+            factor + DMath.tan(Math.abs(location.latitude - decl)),
         );
         return midDay(time) + SAT(time, angle);
     }
@@ -206,8 +206,8 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
                 Math.floor(hours),
                 Math.floor((hours * 60) % 60),
                 Math.floor((hours * 3600) % 60),
-                Math.floor((hours * 3600 * 1000) % 1000)
-            )
+                Math.floor((hours * 3600 * 1000) % 1000),
+            ),
         );
     }
 };

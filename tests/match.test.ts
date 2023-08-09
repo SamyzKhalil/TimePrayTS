@@ -19,7 +19,7 @@ type City = {
 
 it(`should match for cities`, async () => {
     const cities = JSON.parse(
-        await fs.readFile("./assets/cities.json", "utf8")
+        await fs.readFile("./assets/cities.json", "utf8"),
     );
     for (const city of cities as City[]) {
         const input = randomBuiltinInput(+city.latitude, +city.longitude);
@@ -32,7 +32,7 @@ function assertPraytimes(
     inputs: any,
     original: PraytimesOutput,
     newtimes: PraytimesOutput,
-    city?: City
+    city?: City,
 ) {
     for (const key in original) {
         if (isNaN(original[key])) expect(newtimes[key].getTime()).toBeNaN();
@@ -44,7 +44,7 @@ function assertPraytimes(
             } catch (e) {
                 console.log(inputs, original, newtimes, city, e);
                 console.log(
-                    `invalid ${key} \nold:${o.toISOString()}\nnew:${n.toISOString()}`
+                    `invalid ${key} \nold:${o.toISOString()}\nnew:${n.toISOString()}`,
                 );
                 throw e;
             }
@@ -56,7 +56,7 @@ it("specific case ", () => {
         location: [-17.83333, 178.25, 333.33051608360284] as [
             number,
             number,
-            number
+            number,
         ],
         date: new Date("2066-10-26T12:34:03.675Z"),
         method: "Tehran" as const,

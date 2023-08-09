@@ -27,7 +27,7 @@ function getRandomDate(start: Date, end: Date) {
 }
 export const randomBuiltinInput = (
     latitude: number,
-    longitude: number
+    longitude: number,
 ): PrayerInputs => {
     const elevation = Math.random() * 1000;
     const location: [number, number, number?] = [

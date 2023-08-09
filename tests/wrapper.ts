@@ -15,7 +15,7 @@ export function getPraytimes(inputs: PrayerInputs): PraytimesOutput {
             longitude: inputs.location[1],
             elevation: inputs.location[2],
         },
-        inputs.date
+        inputs.date,
     );
 
     return res;

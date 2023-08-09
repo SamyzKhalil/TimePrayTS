@@ -22,7 +22,7 @@ export function OriginalPraytimes(inputs: PrayerInputs): PraytimesOutput {
             v != "-----"
                 ? convertToDate(dateParts, v as number)
                 : new Date(NaN),
-        ])
+        ]),
     ) as any;
 }
 
@@ -35,7 +35,7 @@ function convertToDate(nd: [number, number, number], hours: number) {
             Math.floor(hours),
             Math.floor((hours * 60) % 60),
             Math.floor((hours * 3600) % 60),
-            Math.floor((hours * 3600 * 1000) % 1000)
-        )
+            Math.floor((hours * 3600 * 1000) % 1000),
+        ),
     );
 }

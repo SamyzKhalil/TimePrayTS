@@ -4,13 +4,13 @@ import { fixHour } from "./utils/numbers";
 export function format(
     times: Partial<PraytimesOutput>,
     format: Format,
-    timezone?: number
+    timezone?: number,
 ) {
     return Object.fromEntries(
         Object.entries(times).map(([k, v]) => [
             k,
             formatTime(format, v, timezone),
-        ])
+        ]),
     );
 }
 
