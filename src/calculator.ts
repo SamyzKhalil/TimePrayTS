@@ -18,11 +18,12 @@ be useful, but WITHOUT ANY WARRANTY.
 PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
-import { Degrees, Location, Minutes, Params } from "./types";
-import { sunPosition } from "./utils/sunPosition";
-import { toJulianDate } from "./utils/toJulianDate";
+import {Degrees, Location, Minutes, Params} from "./types";
+import {sunPosition} from "./utils/sunPosition";
+import {toJulianDate} from "./utils/toJulianDate";
 import * as DMath from "./utils/degree-math";
-import { asrFactors } from "./method-data";
+import {asrFactors} from "./method-data";
+import {fixHour} from "./utils/numbers";
 
 const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     const julianDate = toJulianDate(date, location);
@@ -132,7 +133,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
     // compute mid-day time
     function midDay(time: number) {
         const eqt = sunPosition(julianDate + time).equation;
-        const noon = DMath.fixHour(12 - eqt) - location.longitude / 15;
+        const noon = fixHour(12 - eqt) - location.longitude / 15;
         return noon;
     }
 
@@ -158,8 +159,6 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
         return midDay(time) + SAT(time, angle);
     }
 
-    // compute declination angle of sun and equation of time
-    // Ref: http://aa.usno.navy.mil/faq/docs/SunApprox.php
 
     //---------------------- Compute Prayer Times -----------------------
 
@@ -193,7 +192,7 @@ const getCalculator = (setting: Params) => (location: Location, date: Date) => {
 
     // compute the difference between two times
     function timeDifference(time1: number, time2: number) {
-        return DMath.fixHour(time2 - time1);
+        return fixHour(time2 - time1);
     }
 
     function toDate(hours: number) {

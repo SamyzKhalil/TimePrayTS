@@ -1,5 +1,5 @@
-import { Format, PraytimesOutput } from "./types";
-import * as DMath from "./utils/degree-math";
+import {Format, PraytimesOutput} from "./types";
+import {fixHour} from "./utils/numbers";
 
 export function format(
     times: Partial<PraytimesOutput>,
@@ -34,7 +34,7 @@ export function formatTime(format: Format, t: Date, timezone?: number) {
     if (isNaN(time)) return invalidTime;
     if (format == "Float") return time;
 
-    time = DMath.fixHour(time + 0.5 / 60); // add 0.5 minutes to round
+    time = fixHour(time + 0.5 / 60); // add 0.5 minutes to round
     const hours = Math.floor(time);
     const minutes = Math.floor((time - hours) * 60);
     const suffix = format == "12h" ? suffixes[hours < 12 ? 0 : 1] : "";
