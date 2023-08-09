@@ -20,7 +20,8 @@ repos:
             name: test
             entry: yarn test --passWithNoTests
             language: system
-            types: ["ts", "javascript"]
+            files: ""
+            always_run: true
             require_serial: true
           - id: lint
             name: lint
