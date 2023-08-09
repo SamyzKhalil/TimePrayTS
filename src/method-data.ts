@@ -6,6 +6,7 @@ export const defaultParams: Params = {
     maghrib: { minutes: 0 },
     midnight: "Standard",
 };
+
 export const MethodsData = {
     MWL: {
         name: "Muslim World League",

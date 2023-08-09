@@ -25,6 +25,7 @@ function getRandomDate(start: Date, end: Date) {
     const randomTime = Math.random() * (endDate - startDate) + startDate;
     return new Date(randomTime);
 }
+
 export const randomBuiltinInput = (
     latitude: number,
     longitude: number,

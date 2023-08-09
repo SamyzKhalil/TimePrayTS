@@ -18,6 +18,7 @@ const invalidTime = "-----";
 
 const timeSuffixes = ["AM", "PM"];
 const suffixes = timeSuffixes;
+
 export function formatTime(format: Format, t: Date, timezone?: number) {
     const wz = new Date(t.valueOf() + (timezone || 0) * 60 * 60 * 1000);
     let time =

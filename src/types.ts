@@ -16,15 +16,24 @@ export type HighLatsMethod =
     | "AngleBased";
 
 export type Params = {
+    // sun angle below the horizon or minutes before fajr
     imsak?: Degrees | Minutes;
+    // sun angle below the horizon to calculate fajr
     fajr?: Degrees;
+    // minutes after ( or before with negative numbers ) the midday
     dhuhr?: Minutes;
+    // asr shadow factor
     asr?: { factor: number };
+    // sun angle below the horizon or minutes after sunset
     maghrib?: Degrees | Minutes;
+    // sun angle below the horizon or minutes after maghrib
     isha?: Degrees | Minutes;
+    // midnight calculation method we have two methods ("Jafari" and "Standard")
     midnight?: MidnightMethod;
+    // adjustment method for higher latitudes if necessary
     highLats?: HighLatsMethod;
 };
+
 export type Degrees = {
     degree: number;
 };
