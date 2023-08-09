@@ -26,12 +26,12 @@ export function OriginalPraytimes(inputs: PrayerInputs): PraytimesOutput {
     ) as any;
 }
 
-function convertToDate(nd: [number, number, number], hours: number) {
+function convertToDate(dateParts: [number, number, number], hours: number) {
     return new Date(
         Date.UTC(
-            nd[0],
-            nd[1],
-            nd[2],
+            dateParts[0],
+            dateParts[1],
+            dateParts[2],
             Math.floor(hours),
             Math.floor((hours * 60) % 60),
             Math.floor((hours * 3600) % 60),

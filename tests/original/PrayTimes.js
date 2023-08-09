@@ -1,5 +1,5 @@
 //--------------------- Copyright Block ----------------------
-/* 
+/*
 
 PrayTimes.js: Prayer Times Calculator (ver 2.3)
 Copyright (C) 2007-2011 PrayTimes.org
@@ -8,25 +8,25 @@ Developer: Hamid Zarrabi-Zadeh
 License: GNU LGPL v3.0
 
 TERMS OF USE:
-	Permission is granted to use this code, with or 
-	without modification, in any website or application 
-	provided that credit is given to the original work 
+	Permission is granted to use this code, with or
+	without modification, in any website or application
+	provided that credit is given to the original work
 	with a link back to PrayTimes.org.
 
-This program is distributed in the hope that it will 
-be useful, but WITHOUT ANY WARRANTY. 
+This program is distributed in the hope that it will
+be useful, but WITHOUT ANY WARRANTY.
 
 PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
- 
+
 */
 
 //--------------------- Help and Manual ----------------------
 /*
 
-User's Manual: 
+User's Manual:
 http://praytimes.org/manual
 
-Calculation Formulas: 
+Calculation Formulas:
 http://praytimes.org/calculation
 
 
@@ -34,13 +34,13 @@ http://praytimes.org/calculation
 //------------------------ User Interface -------------------------
 
 
-	getTimes (date, coordinates [, timeZone [, dst [, timeFormat]]]) 
-	
-	setMethod (method)       // set calculation method 
-	adjust (parameters)      // adjust calculation parameters	
-	tune (offsets)           // tune times by given offsets 
+	getTimes (date, coordinates [, timeZone [, dst [, timeFormat]]])
 
-	getMethod ()             // get calculation method 
+	setMethod (method)       // set calculation method
+	adjust (parameters)      // adjust calculation parameters
+	tune (offsets)           // tune times by given offsets
+
+	getMethod ()             // get calculation method
 	getSetting ()            // get current calculation parameters
 	getOffsets ()            // get current time offsets
 
@@ -114,16 +114,16 @@ function PrayTimes(method) {
         },
         //----------------------- Parameter Values ----------------------
         /*
-	
+
 	// Asr Juristic Methods
-	asrJuristics = [ 
+	asrJuristics = [
 		'Standard',    // Shafi`i, Maliki, Ja`fari, Hanbali
 		'Hanafi'       // Hanafi
 	],
 
 
 	// Midnight Mode
-	midnightMethods = [ 
+	midnightMethods = [
 		'Standard',    // Mid Sunset to Sunrise
 		'Jafari'       // Mid Sunset to Fajr
 	],
@@ -143,7 +143,7 @@ function PrayTimes(method) {
 		'24h',         // 24-hour format
 		'12h',         // 12-hour format
 		'12hNS',       // 12-hour format with no suffix
-		'Float'        // floating point number 
+		'Float'        // floating point number
 	],
 	*/
 
