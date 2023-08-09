@@ -1,11 +1,5 @@
-import { PraytimesOutput } from "./types";
+import { Format, PraytimesOutput } from "./types";
 import * as DMath from "./utils/degree-math";
-export type Format =
-    | "24h" // 24-hour format
-    | "12h" // 12-hour format
-    | "12hNS" // 12-hour format with no suffix
-    | "Float"; // floating point number
-
 
 export function format(
     times: Partial<PraytimesOutput>,
@@ -29,13 +23,13 @@ export function formatTime(format: Format, t: Date, timezone?: number) {
     let time =
         typeof timezone === "undefined"
             ? t.getHours() +
-            t.getMinutes() / 60 +
-            t.getSeconds() / 3600 +
-            t.getMilliseconds() / (3600 * 1000)
+              t.getMinutes() / 60 +
+              t.getSeconds() / 3600 +
+              t.getMilliseconds() / (3600 * 1000)
             : wz.getUTCHours() +
-            wz.getUTCMinutes() / 60 +
-            wz.getUTCSeconds() / 3600 +
-            wz.getUTCMilliseconds() / (3600 * 1000);
+              wz.getUTCMinutes() / 60 +
+              wz.getUTCSeconds() / 3600 +
+              wz.getUTCMilliseconds() / (3600 * 1000);
 
     if (isNaN(time)) return invalidTime;
     if (format == "Float") return time;
