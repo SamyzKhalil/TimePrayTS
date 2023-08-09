@@ -26,7 +26,7 @@ import { asrFactors } from "./method-data";
 import { fixHour } from "./utils/numbers";
 import { methods } from "./methods";
 
-const getCalculator =
+export const getPrayerCalculator =
     (settings: Params) => (location: Location, date: Date) => {
         const julianDate = toJulianDate(date, location);
 
@@ -217,5 +217,3 @@ const getCalculator =
             );
         }
     };
-
-export default getCalculator;

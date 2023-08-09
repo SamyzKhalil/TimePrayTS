@@ -1,4 +1,4 @@
-import getPrayerCalculator from "../src/calculator";
+import { getPrayerCalculator } from "../src/calculator";
 import { PraytimesOutput } from "../src/types";
 import type { PrayerInputs } from "./PrayerInputs";
 import { methods } from "../src";
