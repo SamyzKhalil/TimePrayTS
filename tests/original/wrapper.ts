@@ -1,7 +1,6 @@
 import { PraytimesOutput } from "../../src/types";
-import { PrayerInputs } from "../PrayerInputs";
 import PrayTimes from "./PrayTimes";
-export function OriginalPraytimes(inputs: PrayerInputs): PraytimesOutput {
+export function OriginalPraytimes(inputs: any): PraytimesOutput {
     const p = new PrayTimes();
     if (inputs.method) p.setMethod(inputs.method);
     if (inputs.params) p.adjust(inputs.params);

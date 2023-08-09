@@ -3,6 +3,7 @@ import { getPraytimes } from "./wrapper";
 import { OriginalPraytimes } from "./original/wrapper";
 import { randomBuiltinInput } from "./utils/random-inputs";
 import { PraytimesOutput } from "../src/types";
+import { PrayerInputs } from "./PrayerInputs";
 type City = {
     id: string;
     name: string;
@@ -64,6 +65,27 @@ it("specific case ", () => {
     };
 
     const originalPraytimes = OriginalPraytimes(input);
+    const newPraytimes = getPraytimes(input);
+
+    assertPraytimes(input, originalPraytimes, newPraytimes);
+});
+
+it("imsak degree", () => {
+    const input: PrayerInputs = {
+        location: [44.9632, 2.48994, 0] as [number, number, number],
+        date: new Date("2066-10-26T12:34:03.675Z"),
+        method: "Tehran" as const,
+        params: {
+            midnight: undefined,
+            highLats: "AngleBased",
+            imsak: { degree: 10 },
+        } as const,
+    };
+
+    const originalPraytimes = OriginalPraytimes({
+        ...input,
+        params: { ...input.params, imsak: 10 },
+    });
     const newPraytimes = getPraytimes(input);
 
     assertPraytimes(input, originalPraytimes, newPraytimes);
