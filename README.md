@@ -11,6 +11,18 @@ Install with npm:
 ```
 npm install pray-times
 ```
+#### Calculation Methods
+
+Supported methods:
+
+- MWL - Muslim World League
+- ISNA - Islamic Society of North America
+- Egypt - Egyptian General Authority of Survey
+- Makkah - Umm al-Qura, Makkah
+- Karachi - University of Islamic Sciences, Karachi
+- Tehran - Institute of Geophysics, University of Tehran
+- Jafari - Shia Ithna Ashari, Leva Institute, Qum
+
 
 ## Usage
 
@@ -72,18 +84,6 @@ const params = {
   highLats: "NightMiddle"
 };
 ```
-
-#### Calculation Methods
-
-Supported methods:
-
-- MWL - Muslim World League
-- ISNA - Islamic Society of North America
-- Egypt - Egyptian General Authority of Survey
-- Makkah - Umm al-Qura, Makkah
-- Karachi - University of Islamic Sciences, Karachi
-- Tehran - Institute of Geophysics, University of Tehran
-- Jafari - Shia Ithna Ashari, Leva Institute, Qum
 
 ## API Reference
 
