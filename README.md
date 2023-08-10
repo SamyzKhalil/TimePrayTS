@@ -60,30 +60,89 @@ for (const time of Object.keys(times)) {
 
 ## Configuration
 
-For most uses, the predefined methods are sufficient:
+For most users the already implemented calculation methods are enough, for example:
 
-```js
-const calculator = getPrayerCalculator(methods.Jafari);
+```ts
+let calculator = getPrayerCalculator(methods.Jafari); // create a calculator based on Jafari method's parameters
 ```
 
-Warning: The parameters are not meant for tuning times - use the tuning function instead.
+**Warning:** these parameters aren't meant to be used as a way of tuning times for precaution - there is another function for this purpose (see [tuning](#tuning))!
 
-For advanced usage, you can provide custom calculation parameters. The default method is MWL. Any custom params will override defaults. See PrayTimes Manual for details.
+But if you want more advanced usage, you can provide your own calculation parameters. The default method is MWL. Anything else will override it. For details see [Praytimes Manual](http://praytimes.org/manual).
 
 ### Example Configuration
 
-```js
-const params = {
-    imsak: { minutes: 10 },
-    fajr: { degree: 18 },
-    dhuhr: { minutes: 0 },
-    asr: { factor: 1 },
-    maghrib: { minutes: 0 },
-    isha: { degree: 17 },
-    midnight: "Standard",
-    highLats: "NightMiddle",
+```ts
+const params: Params = {
+  imsak: { minutes: 10 },
+  fajr: { degree: 18 },
+  dhuhr: { minutes: 0 },
+  asr: { factor: 1 },
+  maghrib: { minutes: 0 },
+  isha: { degree: 17 },
+  midnight: "Standard",
+  highLats: "NightMiddle"
 };
 ```
+
+Here is a description of the parameters:
+
+### imsak
+
+- Type: `Degrees | Minutes`
+- Default: `{minutes: 10}`
+
+The sun angle below horizon or minutes before Fajr for Imsak time.
+
+### fajr
+
+- Type: `Degrees`
+- Default: `{degree: 18}`
+
+The sun angle below horizon to use for Fajr time. In degrees.
+
+### dhuhr
+
+- Type: `Minutes`
+- Default: `{minutes: 0}`
+
+The minutes after (or before with negative) midday for Dhuhr.
+
+### asr
+
+- Type: `{factor: number}`
+- Default: `{factor: 1}`
+
+The shadow factor to use for Asr time.
+
+### maghrib
+
+- Type: `Degrees | Minutes`
+- Default: `{minutes: 0}`
+
+The sun angle below horizon or minutes after sunset for Maghrib.
+
+### isha
+
+- Type: `Degrees | Minutes`
+- Default: `{degree: 17}`
+
+The sun angle below horizon or minutes after Maghrib for Isha.
+
+### midnight
+
+- Type: `MidnightMethod` (`"Standard" | "Jafari"`)
+- Default: `"Standard"`
+
+The method for calculating midnight. "Standard" or "Jafari".
+
+### highLats
+
+- Type: `HighLatsMethod`
+- Default: `"NightMiddle"`
+
+The higher latitude adjustment method. "None", "NightMiddle", "OneSeventh", or "AngleBased".
+
 
 ## API Reference
 
