@@ -1,4 +1,4 @@
-# pray-times
+# time-pray
 
 Prayer Times Calculator for JavaScript Based on [Praytimes.org](https://praytimes.org).
 
@@ -9,7 +9,7 @@ This is a refactor of the original Praytimes.org source code to make it more usa
 Install with npm:
 
 ```
-npm install pray-times
+npm install time-pray
 ```
 
 #### Calculation Methods
@@ -29,7 +29,7 @@ Supported methods:
 Import the functions:
 
 ```js
-import { getPrayerCalculator, methods } from "pray-times";
+import { getPrayerCalculator, methods } from "time-pray";
 ```
 
 Create calculator:
@@ -178,7 +178,7 @@ Time names:
 You can tune times for precaution using the tune method:
 
 ```js
-import { tune } from "pray-times";
+import { tune } from "time-pray";
 
 // Calculate times
 const tunedTimes = tune({ fajr: -3 }, times);
@@ -276,7 +276,7 @@ This package outputs Date objects, which better represent prayer times as absolu
 The format utility can be used to convert to strings as needed:
 
 ```js
-import { format } from "pray-times";
+import { format } from "time-pray";
 
 const formattedTimes = format(times);
 ```
