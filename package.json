@@ -3,6 +3,7 @@
     "version": "1.0.1",
     "main": "dist/src/index.js",
     "license": "GPL-3.0",
+    "prepare": "npm run build",
     "devDependencies": {
         "@types/jest": "^29.5.3",
         "@types/node": "^20.4.9",
@@ -26,6 +27,7 @@
         "format": "prettier . --write",
         "fmt": "npm run format",
         "lint-fmt": "npm run lint && npm run fmt",
+        "prepare": "npm run build",
         "build:watch": "tsc --watch"
     },
     "description": "This is a refactor of the original Praytimes.org source code to make it more usable with npm and JavaScript.",
