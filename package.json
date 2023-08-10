@@ -2,7 +2,7 @@
     "name": "pray-times",
     "version": "1.0.0",
     "main": "dist/src/index.js",
-    "license": "LGPL-3.0",
+    "license": "GPL-3.0",
     "devDependencies": {
         "@types/jest": "^29.5.3",
         "@types/node": "^20.4.9",

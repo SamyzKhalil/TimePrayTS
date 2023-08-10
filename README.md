@@ -230,4 +230,4 @@ PrayTimes.js is based on [PrayTimes](http://praytimes.org). Cities dataset from 
 
 ## License
 
-GNU LGPL v3.0 - see LICENSE
+GNU GPL v3.0 - see LICENSE
