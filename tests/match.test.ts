@@ -20,7 +20,7 @@ type City = {
 
 it(`should match for cities`, async () => {
     const cities = JSON.parse(
-        await fs.readFile("./assets/cities.json", "utf8"),
+        await fs.readFile("./assets/cities-all.json", "utf8"), // change it to cities.json if you want to have faster test runs
     );
     for (const city of cities as City[]) {
         const input = randomBuiltinInput(+city.latitude, +city.longitude);
