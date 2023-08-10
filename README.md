@@ -1,4 +1,4 @@
-# pray-times
+# time-pray
 
 Prayer Times Calculator for JavaScript Based on [Praytimes.org](https://praytimes.org).
 
@@ -9,7 +9,7 @@ This is a refactor of the original Praytimes.org source code to make it more usa
 Install with npm:
 
 ```
-npm install pray-times
+npm install time-pray
 ```
 
 #### Calculation Methods
@@ -29,7 +29,7 @@ Supported methods:
 Import the functions:
 
 ```js
-import { getPrayerCalculator, methods } from "pray-times";
+import { getPrayerCalculator, methods } from "time-pray";
 ```
 
 Create calculator:
@@ -156,8 +156,8 @@ Returns a function that can be called to get prayer times by passing location an
 
 Given a location and date, computes prayer times.
 
--   location - Object with latitude and longitude
--   date - JavaScript Date object
+-   `location` - Object with latitude and longitude
+-   `date` - JavaScript Date object
 
 Returns an object with prayer times mapped to time names. Prayer times are Date objects.
 
@@ -178,7 +178,7 @@ Time names:
 You can tune times for precaution using the tune method:
 
 ```js
-import { tune } from "pray-times";
+import { tune } from "time-pray";
 
 // Calculate times
 const tunedTimes = tune({ fajr: -3 }, times);
@@ -204,9 +204,9 @@ Becomes:
 }
 ```
 
-### formatting
+### Formatting
 
-#### format
+#### Format
 
 Formats prayer times into a desired format.
 
@@ -216,21 +216,20 @@ format(times, format, timezone?)
 
 Parameters:
 
--   times (PraytimesOutput) - Times object to format
--   format (Format) - Format preset. Options:
+-   `times` (PraytimesOutput) - Times object to format
+-   `format` (Format) - Format preset. Options:
     -   "24h" - 24 hour
     -   "12h" - 12 hour with AM/PM
     -   "12hNS" - 12 hour with no suffix
     -   "Float" - Floating point hours
--   timezone (number) - Optional UTC offset in hours
+-   `timezone` (number) - Optional UTC offset in hours
 
 Returns: Object with formatted times.
 
 Example:
 
 ```js
-const formatted = format(
-    {
+const formatted = format({
         fajr: new Date("2023-03-01T13:15:00Z"),
         dhuhr: new Date("2023-03-01T20:30:00Z"),
         asr: new Date("2023-03-02T00:45:00Z"),
@@ -256,9 +255,9 @@ formatTime(format, date, timezone?)
 
 Parameters:
 
--   format (Format) - Format preset
--   date (Date) - Date to format
--   timezone (number) - Optional UTC offset in hours
+-   `format` (Format) - Format preset
+-   `date` (Date) - Date to format
+-   `timezone` (number) - Optional UTC offset in hours
 
 Returns: (string) - Formatted time string
 
@@ -277,7 +276,7 @@ This package outputs Date objects, which better represent prayer times as absolu
 The format utility can be used to convert to strings as needed:
 
 ```js
-import { format } from "pray-times";
+import { format } from "time-pray";
 
 const formattedTimes = format(times);
 ```
@@ -286,7 +285,7 @@ const formattedTimes = format(times);
 
 Tests enforce accuracy within 50ms of original Praytimes.org calculations using a dataset of 150,000 cities globally. Dates, calculation methods, and parameters are randomly generated for robust testing.
 
-The codebase is 100% covered by unit tests.
+The codebase is **100%** covered by unit tests.
 
 To run tests and view coverage:
 
@@ -295,7 +294,8 @@ npm run test:cov
 ```
 
 This will execute the test suite and generate a coverage report.
-results :
+
+Results:
 
 ```
  PASS  src/tune.test.ts
@@ -319,7 +319,6 @@ Snapshots:   0 total
 Time:        85.388 s
 Ran all test suites.
 Done in 85.65s.
-
 ```
 
 ## Credits

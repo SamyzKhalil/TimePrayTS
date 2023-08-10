@@ -1,6 +1,6 @@
 {
-    "name": "pray-times",
-    "version": "1.0.0",
+    "name": "time-pray",
+    "version": "1.0.1",
     "main": "dist/src/index.js",
     "license": "GPL-3.0",
     "devDependencies": {
@@ -28,7 +28,7 @@
         "lint-fmt": "npm run lint && npm run fmt",
         "build:watch": "tsc --watch"
     },
-    "description": "PrayTimesTS",
+    "description": "This is a refactor of the original Praytimes.org source code to make it more usable with npm and JavaScript.",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/BaseMax/PrayTimesTS.git"
