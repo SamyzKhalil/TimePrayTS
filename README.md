@@ -11,18 +11,18 @@ Install with npm:
 ```
 npm install pray-times
 ```
+
 #### Calculation Methods
 
 Supported methods:
 
-- MWL - Muslim World League
-- ISNA - Islamic Society of North America
-- Egypt - Egyptian General Authority of Survey
-- Makkah - Umm al-Qura, Makkah
-- Karachi - University of Islamic Sciences, Karachi
-- Tehran - Institute of Geophysics, University of Tehran
-- Jafari - Shia Ithna Ashari, Leva Institute, Qum
-
+-   MWL - Muslim World League
+-   ISNA - Islamic Society of North America
+-   Egypt - Egyptian General Authority of Survey
+-   Makkah - Umm al-Qura, Makkah
+-   Karachi - University of Islamic Sciences, Karachi
+-   Tehran - Institute of Geophysics, University of Tehran
+-   Jafari - Shia Ithna Ashari, Leva Institute, Qum
 
 ## Usage
 
@@ -42,11 +42,11 @@ Get prayer times:
 
 ```js
 const times = calculator(
-  {
-    longitude: -0.1,
-    latitude: 51.5,
-  },
-  new Date()
+    {
+        longitude: -0.1,
+        latitude: 51.5,
+    },
+    new Date(),
 );
 ```
 
@@ -54,7 +54,7 @@ Output times:
 
 ```js
 for (const time of Object.keys(times)) {
-  console.log(times[time].toISOString());
+    console.log(times[time].toISOString());
 }
 ```
 
@@ -74,14 +74,14 @@ For advanced usage, you can provide custom calculation parameters. The default m
 
 ```js
 const params = {
-  imsak: { minutes: 10 },
-  fajr: { degree: 18 },
-  dhuhr: { minutes: 0 },
-  asr: { factor: 1 },
-  maghrib: { minutes: 0 },
-  isha: { degree: 17 },
-  midnight: "Standard",
-  highLats: "NightMiddle"
+    imsak: { minutes: 10 },
+    fajr: { degree: 18 },
+    dhuhr: { minutes: 0 },
+    asr: { factor: 1 },
+    maghrib: { minutes: 0 },
+    isha: { degree: 17 },
+    midnight: "Standard",
+    highLats: "NightMiddle",
 };
 ```
 
@@ -97,22 +97,22 @@ Returns a function that can be called to get prayer times by passing location an
 
 Given a location and date, computes prayer times.
 
-- location - Object with latitude and longitude
-- date - JavaScript Date object
+-   location - Object with latitude and longitude
+-   date - JavaScript Date object
 
 Returns an object with prayer times mapped to time names. Prayer times are Date objects.
 
 Time names:
 
-- imsak
-- fajr
-- sunrise
-- dhuhr
-- asr
-- sunset
-- maghrib
-- isha
-- midnight
+-   imsak
+-   fajr
+-   sunrise
+-   dhuhr
+-   asr
+-   sunset
+-   maghrib
+-   isha
+-   midnight
 
 ### tuning
 
@@ -157,24 +157,28 @@ format(times, format, timezone?)
 
 Parameters:
 
-- times (PraytimesOutput) - Times object to format
-- format (Format) - Format preset. Options:
-  - "24h" - 24 hour
-  - "12h" - 12 hour with AM/PM
-  - "12hNS" - 12 hour with no suffix
-  - "Float" - Floating point hours
-- timezone (number) - Optional UTC offset in hours
+-   times (PraytimesOutput) - Times object to format
+-   format (Format) - Format preset. Options:
+    -   "24h" - 24 hour
+    -   "12h" - 12 hour with AM/PM
+    -   "12hNS" - 12 hour with no suffix
+    -   "Float" - Floating point hours
+-   timezone (number) - Optional UTC offset in hours
 
 Returns: Object with formatted times.
 
 Example:
 
 ```js
-const formatted = format({
-  fajr: new Date('2023-03-01T13:15:00Z'),
-  dhuhr: new Date('2023-03-01T20:30:00Z'),
-  asr: new Date('2023-03-02T00:45:00Z')
-}, '12h', -8);
+const formatted = format(
+    {
+        fajr: new Date("2023-03-01T13:15:00Z"),
+        dhuhr: new Date("2023-03-01T20:30:00Z"),
+        asr: new Date("2023-03-02T00:45:00Z"),
+    },
+    "12h",
+    -8,
+);
 
 // {
 //   fajr: "5:15AM",
@@ -182,7 +186,6 @@ const formatted = format({
 //   asr: "4:45PM"
 // }
 ```
-
 
 #### formatTime
 
@@ -194,16 +197,16 @@ formatTime(format, date, timezone?)
 
 Parameters:
 
-- format (Format) - Format preset
-- date (Date) - Date to format
-- timezone (number) - Optional UTC offset in hours
+-   format (Format) - Format preset
+-   date (Date) - Date to format
+-   timezone (number) - Optional UTC offset in hours
 
 Returns: (string) - Formatted time string
 
 Example:
 
 ```js
-formatTime('24h', new Date())
+formatTime("24h", new Date());
 ```
 
 ## Output Philosophy
@@ -223,6 +226,42 @@ const formattedTimes = format(times);
 ## Tests
 
 Tests enforce accuracy within 50ms of original Praytimes.org calculations using a dataset of 150,000 cities globally. Dates, calculation methods, and parameters are randomly generated for robust testing.
+
+The codebase is 100% covered by unit tests.
+
+To run tests and view coverage:
+
+```
+npm run test:cov
+```
+
+This will execute the test suite and generate a coverage report.
+results :
+
+```
+ PASS  src/tune.test.ts
+ PASS  src/format.test.ts
+ PASS  tests/match.test.ts (85.119 s)
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------------|---------|----------|---------|---------|-------------------
+All files       |     100 |      100 |    93.1 |     100 |
+ calculator.ts  |     100 |      100 |     100 |     100 |
+ format.ts      |     100 |      100 |     100 |     100 |
+ index.ts       |     100 |      100 |       0 |     100 |
+ method-data.ts |     100 |      100 |     100 |     100 |
+ methods.ts     |     100 |      100 |     100 |     100 |
+ tune.ts        |     100 |      100 |     100 |     100 |
+----------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 3 passed, 3 total
+Tests:       17 passed, 17 total
+Snapshots:   0 total
+Time:        85.388 s
+Ran all test suites.
+Done in 85.65s.
+
+```
 
 ## Credits
 
