@@ -1,113 +1,43 @@
 import fs from "fs/promises";
-import { getPraytimes } from "./wrapper";
-import { OriginalPraytimes } from "./original/wrapper";
-import { randomBuiltinInput } from "./utils/random-inputs";
-import { PraytimesOutput } from "../src/types";
-import { PrayerInputs } from "./PrayerInputs";
-type City = {
-    id: string;
-    name: string;
-    state_id: string;
-    state_code: string;
-    state_name: string;
-    country_id: string;
-    country_code: string;
-    country_name: string;
-    latitude: string;
-    longitude: string;
-    wikiDataId: string;
-};
+import { getPrayerCalculator } from "../src";
+import { TestCase } from "./test-case";
 
-it(`should match for cities`, async () => {
-    const cities = JSON.parse(
-        await fs.readFile("./assets/cities-all.json", "utf8"), // change it to cities.json if you want to have faster test runs
-    );
-    for (const city of cities as City[]) {
-        const input = randomBuiltinInput(+city.latitude, +city.longitude);
-        const originalPraytimes = OriginalPraytimes(input);
-        const newPraytimes = getPraytimes(input);
-        assertPraytimes(input, originalPraytimes, newPraytimes, city);
+it(`should match with the original code`, async () => {
+    const data: TestCase[] = await readTestData();
+
+    for (const testCase of data) {
+        const {
+            inputs: { params, location, date },
+            originalOutput,
+        } = testCase;
+        const calculator = getPrayerCalculator(params);
+
+        const praytimes = calculator(location, date);
+        assertPraytimes(originalOutput, praytimes);
     }
 });
-function assertPraytimes(
-    inputs: any,
-    original: PraytimesOutput,
-    newtimes: PraytimesOutput,
-    city?: City,
-) {
+async function readTestData(): Promise<TestCase[]> {
+    return JSON.parse(await fs.readFile("./assets/test-data.json", "utf8")).map(
+        ({ inputs: { params, location, date }, originalOutput }) => ({
+            inputs: { params, location, date: new Date(date) },
+            originalOutput: Object.fromEntries(
+                Object.entries(originalOutput).map(([k, v]: any) => [
+                    k,
+                    v === null ? new Date(NaN) : new Date(v),
+                ]),
+            ),
+        }),
+    );
+}
+
+function assertPraytimes(original: any, newtimes: any) {
     for (const key in original) {
         if (isNaN(original[key])) expect(newtimes[key].getTime()).toBeNaN();
         else {
-            const o: Date = original[key];
-            const n: Date = newtimes[key];
-            try {
-                expect(n.getTime()).toBeCloseTo(o.getTime(), -2);
-            } catch (e) {
-                console.log(inputs, original, newtimes, city, e);
-                console.log(
-                    `invalid ${key} \nold:${o.toISOString()}\nnew:${n.toISOString()}`,
-                );
-                throw e;
-            }
+            expect(newtimes[key].getTime()).toBeCloseTo(
+                original[key].getTime(),
+                -2,
+            );
         }
     }
 }
-it("specific case ", () => {
-    const input = {
-        location: [-17.83333, 178.25, 333.33051608360284] as [
-            number,
-            number,
-            number,
-        ],
-        date: new Date("2066-10-26T12:34:03.675Z"),
-        method: "Tehran" as const,
-        params: { midnight: undefined, highLats: "AngleBased" } as const,
-    };
-
-    const originalPraytimes = OriginalPraytimes(input);
-    const newPraytimes = getPraytimes(input);
-
-    assertPraytimes(input, originalPraytimes, newPraytimes);
-});
-
-it("imsak degree high lats", () => {
-    const input: PrayerInputs = {
-        location: [89, 2.48994, 0] as [number, number, number],
-        date: new Date("2066-10-26T12:34:03.675Z"),
-        method: "Tehran" as const,
-        params: {
-            midnight: undefined,
-            highLats: "AngleBased",
-            imsak: { degree: 10 },
-        } as const,
-    };
-
-    const originalPraytimes = OriginalPraytimes({
-        ...input,
-        params: { ...input.params, imsak: "10" },
-    });
-    const newPraytimes = getPraytimes(input);
-
-    assertPraytimes(input, originalPraytimes, newPraytimes);
-});
-
-it("imsak degree", () => {
-    const input: PrayerInputs = {
-        location: [30, 2.48994, 0] as [number, number, number],
-        date: new Date("2066-10-26T12:34:03.675Z"),
-        method: "Tehran" as const,
-        params: {
-            midnight: undefined,
-            highLats: "AngleBased",
-            imsak: { degree: 10 },
-        } as const,
-    };
-
-    const originalPraytimes = OriginalPraytimes({
-        ...input,
-        params: { ...input.params, imsak: "10" },
-    });
-    const newPraytimes = getPraytimes(input);
-
-    assertPraytimes(input, originalPraytimes, newPraytimes);
-});

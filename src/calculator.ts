@@ -22,23 +22,12 @@ import { Degrees, Location, Minutes, Params } from "./types";
 import { sunPosition } from "./utils/sunPosition";
 import { toJulianDate } from "./utils/toJulianDate";
 import * as DMath from "./utils/degree-math";
-import { asrFactors } from "./method-data";
 import { fixHour } from "./utils/numbers";
-import { methods } from "./methods";
 
 export const getPrayerCalculator =
     (settings: Params) => (location: Location, date: Date) => {
         const julianDate = toJulianDate(date, location);
 
-        settings = {
-            imsak: { minutes: 10 },
-            dhuhr: { minutes: 0 },
-            asr: asrFactors.Standard,
-            highLats: "NightMiddle",
-            ...methods.MWL,
-            ...settings,
-        };
-        const finalSettings: Required<Params> = settings as Required<Params>;
         return {
             dhuhr: toDate(dhuhr()),
             sunset: toDate(sunset()),
@@ -52,11 +41,11 @@ export const getPrayerCalculator =
         };
 
         function asr() {
-            return asrTime(finalSettings.asr.factor, 13 / 24);
+            return asrTime(settings.asr.factor, 13 / 24);
         }
 
         function dhuhr() {
-            return midDay(12 / 24) + finalSettings.dhuhr.minutes / 60;
+            return midDay(12 / 24) + settings.dhuhr.minutes / 60;
         }
 
         function midnight() {
@@ -64,7 +53,7 @@ export const getPrayerCalculator =
                 sunset() +
                 timeDifference(
                     sunset(),
-                    finalSettings.midnight == "Jafari" ? fajr() : sunrise(),
+                    settings.midnight == "Jafari" ? fajr() : sunrise(),
                 ) /
                     2
             );
@@ -75,11 +64,11 @@ export const getPrayerCalculator =
         }
 
         function isha() {
-            if (isMinutes(finalSettings.isha)) {
-                return maghrib() + finalSettings.isha.minutes / 60;
+            if (isMinutes(settings.isha)) {
+                return maghrib() + settings.isha.minutes / 60;
             }
 
-            const angle = finalSettings.isha.degree;
+            const angle = settings.isha.degree;
             const time = midDay(18 / 24) + SAT(18 / 24, angle);
             if (hlAdjustmentNeeded(time, sunset(), angle)) {
                 return sunset() + nightPortion(angle);
@@ -89,10 +78,10 @@ export const getPrayerCalculator =
         }
 
         function maghrib() {
-            if (isMinutes(finalSettings.maghrib)) {
-                return sunset() + finalSettings.maghrib.minutes / 60;
+            if (isMinutes(settings.maghrib)) {
+                return sunset() + settings.maghrib.minutes / 60;
             }
-            const angle = finalSettings.maghrib.degree;
+            const angle = settings.maghrib.degree;
             const time = midDay(18 / 24) + SAT(18 / 24, angle);
             if (hlAdjustmentNeeded(time, sunset(), angle)) {
                 return sunset() + nightPortion(angle);
@@ -101,10 +90,10 @@ export const getPrayerCalculator =
         }
 
         function imsak() {
-            if (isMinutes(finalSettings.imsak)) {
-                return fajr() - finalSettings.imsak.minutes / 60;
+            if (isMinutes(settings.imsak)) {
+                return fajr() - settings.imsak.minutes / 60;
             }
-            const angle = finalSettings.imsak.degree;
+            const angle = settings.imsak.degree;
             const time = midDay(5 / 24) - SAT(5 / 24, angle);
             if (hlAdjustmentNeeded(time, sunrise(), angle)) {
                 return sunrise() - nightPortion(angle);
@@ -113,7 +102,7 @@ export const getPrayerCalculator =
         }
 
         function fajr() {
-            const angle = finalSettings.fajr.degree;
+            const angle = settings.fajr.degree;
             const time = midDay(5 / 24) - SAT(5 / 24, angle);
             if (hlAdjustmentNeeded(time, sunrise(), angle)) {
                 return sunrise() - nightPortion(angle);
@@ -180,7 +169,7 @@ export const getPrayerCalculator =
             const portion = nightPortion(angle);
             const timeDiff = Math.abs(time - base);
             return (
-                finalSettings.highLats != "None" &&
+                settings.highLats != "None" &&
                 (isNaN(time) || timeDiff > portion)
             );
         }
@@ -188,7 +177,7 @@ export const getPrayerCalculator =
         // the night portion used for adjusting times in higher latitudes
         function nightPortion(angle: number) {
             const night = nightTime();
-            const method = finalSettings.highLats;
+            const method = settings.highLats;
             let portion = 1 / 2; // MidNight
             if (method == "AngleBased") portion = (1 / 60) * angle;
             if (method == "OneSeventh") portion = 1 / 7;

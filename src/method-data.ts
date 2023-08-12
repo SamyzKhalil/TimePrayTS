@@ -2,10 +2,18 @@ import { Params } from "./types";
 
 export const asrFactors = { Standard: { factor: 1 }, Hanafi: { factor: 2 } };
 
-export const defaultParams: Params = {
+const setting = {
+    imsak: { minutes: 10 },
+    dhuhr: { minutes: 0 },
+    asr: asrFactors.Standard,
+    highLats: "NightMiddle",
+} satisfies Partial<Params>;
+
+export const defaultParams = {
     maghrib: { minutes: 0 },
     midnight: "Standard",
-};
+    ...setting,
+} satisfies Partial<Params>;
 
 export const MethodsData = {
     MWL: {

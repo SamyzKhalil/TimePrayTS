@@ -74,14 +74,14 @@ But if you want more advanced usage, you can provide your own calculation parame
 
 ```ts
 const params: Params = {
-  imsak: { minutes: 10 },
-  fajr: { degree: 18 },
-  dhuhr: { minutes: 0 },
-  asr: { factor: 1 },
-  maghrib: { minutes: 0 },
-  isha: { degree: 17 },
-  midnight: "Standard",
-  highLats: "NightMiddle"
+    imsak: { minutes: 10 },
+    fajr: { degree: 18 },
+    dhuhr: { minutes: 0 },
+    asr: { factor: 1 },
+    maghrib: { minutes: 0 },
+    isha: { degree: 17 },
+    midnight: "Standard",
+    highLats: "NightMiddle",
 };
 ```
 
@@ -89,60 +89,59 @@ Here is a description of the parameters:
 
 ### imsak
 
-- Type: `Degrees | Minutes`
-- Default: `{minutes: 10}`
+-   Type: `Degrees | Minutes`
+-   Default: `{minutes: 10}`
 
 The sun angle below horizon or minutes before Fajr for Imsak time.
 
 ### fajr
 
-- Type: `Degrees`
-- Default: `{degree: 18}`
+-   Type: `Degrees`
+-   Default: `{degree: 18}`
 
 The sun angle below horizon to use for Fajr time. In degrees.
 
 ### dhuhr
 
-- Type: `Minutes`
-- Default: `{minutes: 0}`
+-   Type: `Minutes`
+-   Default: `{minutes: 0}`
 
 The minutes after (or before with negative) midday for Dhuhr.
 
 ### asr
 
-- Type: `{factor: number}`
-- Default: `{factor: 1}`
+-   Type: `{factor: number}`
+-   Default: `{factor: 1}`
 
 The shadow factor to use for Asr time.
 
 ### maghrib
 
-- Type: `Degrees | Minutes`
-- Default: `{minutes: 0}`
+-   Type: `Degrees | Minutes`
+-   Default: `{minutes: 0}`
 
 The sun angle below horizon or minutes after sunset for Maghrib.
 
 ### isha
 
-- Type: `Degrees | Minutes`
-- Default: `{degree: 17}`
+-   Type: `Degrees | Minutes`
+-   Default: `{degree: 17}`
 
 The sun angle below horizon or minutes after Maghrib for Isha.
 
 ### midnight
 
-- Type: `MidnightMethod` (`"Standard" | "Jafari"`)
-- Default: `"Standard"`
+-   Type: `MidnightMethod` (`"Standard" | "Jafari"`)
+-   Default: `"Standard"`
 
 The method for calculating midnight. "Standard" or "Jafari".
 
 ### highLats
 
-- Type: `HighLatsMethod`
-- Default: `"NightMiddle"`
+-   Type: `HighLatsMethod`
+-   Default: `"NightMiddle"`
 
 The higher latitude adjustment method. "None", "NightMiddle", "OneSeventh", or "AngleBased".
-
 
 ## API Reference
 
@@ -229,7 +228,8 @@ Returns: Object with formatted times.
 Example:
 
 ```js
-const formatted = format({
+const formatted = format(
+    {
         fajr: new Date("2023-03-01T13:15:00Z"),
         dhuhr: new Date("2023-03-01T20:30:00Z"),
         asr: new Date("2023-03-02T00:45:00Z"),
