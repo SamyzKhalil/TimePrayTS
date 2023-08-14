@@ -46,7 +46,7 @@ const times = calculator(
         longitude: -0.1,
         latitude: 51.5,
     },
-    new Date(),
+    today(), // or getDatePartsUTC(new Date("2022-11-12")) or [2022,11,12]
 );
 ```
 
@@ -265,6 +265,58 @@ Example:
 
 ```js
 formatTime("24h", new Date());
+```
+
+### Date functions
+
+#### getDatePartsUTC
+
+Returns an array of [year, month, day] representing the UTC date.
+
+```js
+getDatePartsUTC(date);
+```
+
+Parameters:
+
+-   `date` (Date) - Input date
+
+Returns: (Number[]) - Array of [year, month, day]
+
+Example:
+
+```js
+getDatePartsUTC(new Date());
+```
+
+#### today
+
+Returns the current date as an array of [year, month, day] in the local timezone.
+
+```js
+today();
+```
+
+Returns: (Number[]) - Array of [year, month, day]
+
+#### getDatePartsLocal
+
+Returns an array of [year, month, day] representing the date in the local timezone.
+
+```js
+getDatePartsLocal(date);
+```
+
+Parameters:
+
+-   `date` (Date) - Input date
+
+Returns: (Number[]) - Array of [year, month, day]
+
+Example:
+
+```js
+getDatePartsLocal(new Date());
 ```
 
 ## Output Philosophy
