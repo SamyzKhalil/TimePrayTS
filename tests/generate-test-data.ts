@@ -67,7 +67,7 @@ function main() {
         const originalOutput = OriginalPraytimes({
             location: inputs.location,
             params: convertParamsToOld(inputs.params),
-            date: inputs.date,
+            date: new Date(inputs.date),
         });
         result.push({ inputs, originalOutput });
     }
@@ -78,15 +78,19 @@ main();
 function randomInputGenerator(): {
     params: Params;
     location: Location;
-    date: Date;
+    date: string;
 } {
+    const date = getRandomDate(new Date("1900-1-1"), new Date("2100-1-1"));
+    const dateString = `${date.getFullYear()}-${
+        date.getMonth() + 1
+    }-${date.getDate()}`;
     return {
         params:
             Math.random() > 0.5
                 ? getRandomParameters()
                 : methods[getRandomMethod()],
         location: getRandomLocation(),
-        date: getRandomDate(new Date("1900-1-1"), new Date("2100-1-1")),
+        date: dateString,
     };
 }
 function getRandomParameters(): Params {

@@ -12,7 +12,7 @@ it(`should match with the original code`, async () => {
         } = testCase;
         const calculator = getPrayerCalculator(params);
 
-        const praytimes = calculator(location, date);
+        const praytimes = calculator(location, date as Date);
         assertPraytimes(originalOutput, praytimes);
     }
 });
