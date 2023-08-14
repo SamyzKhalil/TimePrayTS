@@ -5,12 +5,6 @@ export function OriginalPraytimes(inputs: any): PraytimesOutput {
     if (inputs.method) p.setMethod(inputs.method);
     if (inputs.params) p.adjust(inputs.params);
 
-    const dateParts: [number, number, number] = [
-        inputs.date.getFullYear(),
-        inputs.date.getMonth(),
-        inputs.date.getDate(),
-    ];
-
     const res = p.getTimes(
         inputs.date,
         [
@@ -27,7 +21,7 @@ export function OriginalPraytimes(inputs: any): PraytimesOutput {
         Object.entries(res).map(([k, v]) => [
             k,
             v != "-----"
-                ? convertToDate(dateParts, v as number)
+                ? convertToDate(inputs.date, v as number)
                 : new Date(NaN),
         ]),
     ) as any;
@@ -35,14 +29,7 @@ export function OriginalPraytimes(inputs: any): PraytimesOutput {
 
 function convertToDate(dateParts: [number, number, number], hours: number) {
     return new Date(
-        Date.UTC(
-            dateParts[0],
-            dateParts[1],
-            dateParts[2],
-            Math.floor(hours),
-            Math.floor((hours * 60) % 60),
-            Math.floor((hours * 3600) % 60),
-            Math.floor((hours * 3600 * 1000) % 1000),
-        ),
+        Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]) +
+            hours * 3600 * 1000,
     );
 }

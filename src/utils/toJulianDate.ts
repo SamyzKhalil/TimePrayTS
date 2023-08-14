@@ -1,10 +1,7 @@
-import { Location } from "../types";
+import { DateOnly, Location } from "../types";
 
-export function toJulianDate(date: Date, location: Location) {
-    return (
-        julian(date.getFullYear(), date.getMonth() + 1, date.getDate()) -
-        location.longitude / (15 * 24)
-    );
+export function toJulianDate(date: DateOnly, location: Location) {
+    return julian(date[0], date[1], date[2]) - location.longitude / (15 * 24);
 }
 // convert Gregorian date to Julian day
 // Ref: Astronomical Algorithms by Jean Meeus

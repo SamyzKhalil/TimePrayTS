@@ -1,5 +1,6 @@
 import { methods, Params } from "../src";
 import {
+    DateOnly,
     Degrees,
     HighLatsMethod,
     Location,
@@ -67,7 +68,7 @@ function main() {
         const originalOutput = OriginalPraytimes({
             location: inputs.location,
             params: convertParamsToOld(inputs.params),
-            date: new Date(inputs.date),
+            date: inputs.date,
         });
         result.push({ inputs, originalOutput });
     }
@@ -78,19 +79,21 @@ main();
 function randomInputGenerator(): {
     params: Params;
     location: Location;
-    date: string;
+    date: DateOnly;
 } {
     const date = getRandomDate(new Date("1900-1-1"), new Date("2100-1-1"));
-    const dateString = `${date.getFullYear()}-${
-        date.getMonth() + 1
-    }-${date.getDate()}`;
+    const dateOnly: DateOnly = [
+        date.getUTCFullYear(),
+        date.getUTCMonth() + 1,
+        date.getUTCDate(),
+    ];
     return {
         params:
             Math.random() > 0.5
                 ? getRandomParameters()
                 : methods[getRandomMethod()],
         location: getRandomLocation(),
-        date: dateString,
+        date: dateOnly,
     };
 }
 function getRandomParameters(): Params {

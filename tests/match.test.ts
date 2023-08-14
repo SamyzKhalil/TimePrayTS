@@ -12,14 +12,14 @@ it(`should match with the original code`, async () => {
         } = testCase;
         const calculator = getPrayerCalculator(params);
 
-        const praytimes = calculator(location, date as Date);
+        const praytimes = calculator(location, date);
         assertPraytimes(originalOutput, praytimes);
     }
 });
 async function readTestData(): Promise<TestCase[]> {
     return JSON.parse(await fs.readFile("./assets/test-data.json", "utf8")).map(
         ({ inputs: { params, location, date }, originalOutput }) => ({
-            inputs: { params, location, date: new Date(date) },
+            inputs: { params, location, date: date },
             originalOutput: Object.fromEntries(
                 Object.entries(originalOutput).map(([k, v]: any) => [
                     k,

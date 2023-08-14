@@ -18,14 +18,14 @@ be useful, but WITHOUT ANY WARRANTY.
 PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
-import { Degrees, Location, Minutes, Params } from "./types";
+import { DateOnly, Degrees, Location, Minutes, Params } from "./types";
 import { sunPosition } from "./utils/sunPosition";
 import { toJulianDate } from "./utils/toJulianDate";
 import * as DMath from "./utils/degree-math";
 import { fixHour } from "./utils/numbers";
 
 export const getPrayerCalculator =
-    (settings: Params) => (location: Location, date: Date) => {
+    (settings: Params) => (location: Location, date: DateOnly) => {
         const julianDate = toJulianDate(date, location);
 
         return {
@@ -194,15 +194,7 @@ export const getPrayerCalculator =
                 return new Date(NaN);
             }
             return new Date(
-                Date.UTC(
-                    date.getFullYear(),
-                    date.getMonth(),
-                    date.getDate(),
-                    Math.floor(hours),
-                    Math.floor((hours * 60) % 60),
-                    Math.floor((hours * 3600) % 60),
-                    Math.floor((hours * 3600 * 1000) % 1000),
-                ),
+                Date.UTC(date[0], date[1] - 1, date[2]) + hours * 3600 * 1000,
             );
         }
     };

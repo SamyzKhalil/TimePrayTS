@@ -66,3 +66,5 @@ export type Format =
     | "12h" // 12-hour format
     | "12hNS" // 12-hour format with no suffix
     | "Float"; // floating point number
+
+export type DateOnly = [number, number, number];
