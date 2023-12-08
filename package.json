@@ -1,6 +1,6 @@
 {
     "name": "time-pray",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "main": "dist/time-pray.js",
     "module": "dist/time-pray.js",
     "types": "dist/time-pray.d.ts",
