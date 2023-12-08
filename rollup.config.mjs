@@ -6,6 +6,11 @@ export default [
         input: "src/index.ts",
         output: [
             {
+                file: "dist/time-pray.cjs.js",
+                format: "cjs",
+                sourcemap: true,
+            },
+            {
                 file: "dist/time-pray.esm.js",
                 format: "es",
                 sourcemap: true,

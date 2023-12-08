@@ -1,8 +1,8 @@
 {
     "name": "time-pray",
     "version": "1.0.4",
-    "main": "dist/time-pray.js",
-    "module": "dist/time-pray.js",
+    "main": "dist/time-pray.cjs.js",
+    "module": "dist/time-pray.esm.js",
     "types": "dist/time-pray.d.ts",
     "license": "GPL-3.0",
     "prepare": "npm run build",
