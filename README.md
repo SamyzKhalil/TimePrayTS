@@ -1,5 +1,9 @@
 # time-pray
 
+Fork of [TimePrayTS](https://github.com/BaseMax/TimePrayTS) with rollup bundling.
+
+---
+
 Prayer Times Calculator for JavaScript Based on [Praytimes.org](https://praytimes.org).
 
 This is a refactor of the original Praytimes.org source code to make it more usable with npm and JavaScript. The output formats have also been updated - see Output Philosophy section for more details.
